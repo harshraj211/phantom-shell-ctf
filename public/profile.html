@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop - Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+    <a class="logo" href="index.html">🛒 SecureShop</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="comment.html">Community</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="flags.html">🚩 Flags</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2>👤 User Profile</h2>
+
+    <form onsubmit="loadProfile(event)">
+        <label>Enter Username to View Profile</label>
+        <input type="text" id="userInput" placeholder="e.g. john">
+        <p class="hint">💡 Hint: Try <code>&lt;img src=x onerror="alert('FLAG{xss_reflected_gotcha}')"&gt;</code></p>
+        <button type="submit">View Profile</button>
+    </form>
+
+    <div id="profile-result"></div>
+</div>
+
+<footer>SecureShop &copy; 2024 — For educational purposes only</footer>
+
+<script>
+    async function loadProfile(e) {
+        e.preventDefault();
+        const user = document.getElementById('userInput').value;
+        const result = document.getElementById('profile-result');
+
+        if (!user) return;
+
+        try {
+            const res = await fetch(`/api/profile?user=${encodeURIComponent(user)}`);
+            const data = await res.json();
+
+            // VULNERABLE: data.user is injected raw into innerHTML
+            result.innerHTML = `
+                <hr style="margin:25px 0;">
+                <div style="display:flex; align-items:center; gap:20px; margin-bottom:20px;">
+                    <div style="width:70px;height:70px;background:#3498db;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:28px;">👤</div>
+                    <div>
+                        <h3>Viewing profile: <span id="profile-username"></span></h3>
+                        <p style="color:#777;">Member since ${data.member_since}</p>
+                    </div>
+                </div>
+                <p style="color:#555;">This user hasn't filled out their bio yet.</p>
+            `;
+
+            // VULNERABLE: innerHTML renders XSS payload from URL/input
+            document.getElementById('profile-username').innerHTML = data.user;
+
+        } catch (err) {
+            result.innerHTML = '<div class="alert alert-danger">Request failed.</div>';
+        }
+    }
+
+    // Auto-load if ?user= is in URL
+    window.onload = () => {
+        const params = new URLSearchParams(window.location.search);
+        const user = params.get('user');
+        if (user) {
+            document.getElementById('userInput').value = user;
+            document.getElementById('userInput').closest('form').dispatchEvent(new Event('submit'));
+        }
+    };
+</script>
+</body>
+</html>

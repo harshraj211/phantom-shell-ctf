@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop - Search</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+    <a class="logo" href="index.html">🛒 SecureShop</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="comment.html">Community</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="flags.html">🚩 Flags</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2>🔍 Product Search</h2>
+
+    <form onsubmit="doSearch(event)">
+        <label>Search Products</label>
+        <input type="text" id="query" placeholder="e.g. laptop, phone...">
+        <p class="hint">💡 Hint: Try <code>' UNION SELECT 1,flag,3,4 FROM secrets--</code></p>
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="results"></div>
+</div>
+
+<footer>SecureShop &copy; 2024 — For educational purposes only</footer>
+
+<script>
+    async function doSearch(e) {
+        e.preventDefault();
+        const q = document.getElementById('query').value;
+        const results = document.getElementById('results');
+
+        results.innerHTML = '<p class="loading">Searching...</p>';
+
+        try {
+            const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+            const data = await res.json();
+
+            if (!data.results || data.results.length === 0) {
+                results.innerHTML = '<div class="alert alert-info">No products found.</div>';
+                return;
+            }
+
+            let html = '<table><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th></tr>';
+            data.results.forEach(r => {
+                html += `<tr>
+                    <td>${r.id}</td>
+                    <td>${r.name}</td>
+                    <td>${r.category}</td>
+                    <td>${r.price !== null ? '$' + r.price : ''}</td>
+                </tr>`;
+            });
+            html += '</table>';
+            results.innerHTML = html;
+        } catch (err) {
+            results.innerHTML = '<div class="alert alert-danger">Request failed.</div>';
+        }
+    }
+
+    // Load all products on page load
+    window.onload = () => {
+        fetch('/api/search').then(r => r.json()).then(data => {
+            const results = document.getElementById('results');
+            let html = '<table><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th></tr>';
+            data.results.forEach(r => {
+                html += `<tr><td>${r.id}</td><td>${r.name}</td><td>${r.category}</td><td>$${r.price}</td></tr>`;
+            });
+            html += '</table>';
+            results.innerHTML = html;
+        });
+    };
+</script>
+</body>
+</html>

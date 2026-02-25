@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+    <a class="logo" href="index.html">🛒 SecureShop</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="comment.html">Community</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="flags.html">🚩 Flags</a></li>
+    </ul>
+</nav>
+
+<div class="container" style="max-width:450px;">
+    <h2>🔐 Login</h2>
+
+    <div id="result"></div>
+
+    <form onsubmit="doLogin(event)">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Enter username" autocomplete="off">
+        <p class="hint">💡 Try: <code>' OR '1'='1' --</code> as username</p>
+
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password">
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<footer>SecureShop &copy; 2024 — For educational purposes only</footer>
+
+<script>
+    async function doLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const result = document.getElementById('result');
+
+        result.innerHTML = '<div class="alert alert-info">Checking...</div>';
+
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                result.innerHTML = `
+                    <div class="alert alert-success">✅ Welcome back, <strong>${data.username}</strong>!</div>
+                    <div class="flag-box">🚩 ${data.flag}</div>
+                `;
+            } else {
+                result.innerHTML = `<div class="alert alert-danger">❌ ${data.error}</div>`;
+            }
+        } catch (err) {
+            result.innerHTML = `<div class="alert alert-danger">❌ Request failed.</div>`;
+        }
+    }
+</script>
+</body>
+</html>

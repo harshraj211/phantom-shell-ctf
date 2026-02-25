@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+    <a class="logo" href="index.html">🛒 SecureShop</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="comment.html">Community</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="flags.html">🚩 Flags</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2>Welcome to SecureShop 👋</h2>
+    <p style="color:#777; margin-bottom:30px;">A totally normal and definitely secure online shopping platform. Browse our labs below to get started.</p>
+
+    <div class="card-grid">
+        <a class="card" href="login.html">
+            <h3>🔐 Login</h3>
+            <p>Access your account securely.</p>
+            <span class="vuln-tag">SQLi</span>
+        </a>
+        <a class="card" href="search.html">
+            <h3>🔍 Product Search</h3>
+            <p>Search for products in our catalog.</p>
+            <span class="vuln-tag">SQLi</span>
+        </a>
+        <a class="card" href="comment.html">
+            <h3>💬 Community Board</h3>
+            <p>Leave comments and read others.</p>
+            <span class="vuln-tag">Stored XSS</span>
+        </a>
+        <a class="card" href="profile.html">
+            <h3>👤 Profile</h3>
+            <p>View your public profile page.</p>
+            <span class="vuln-tag">Reflected XSS</span>
+        </a>
+        <a class="card" href="admin.html">
+            <h3>⚙️ Admin Panel</h3>
+            <p>Restricted area. Admins only.</p>
+            <span class="vuln-tag">Broken Auth</span>
+        </a>
+        <a class="card" href="flags.html">
+            <h3>🚩 Flag Checker</h3>
+            <p>Submit your captured flags here.</p>
+            <span class="vuln-tag" style="background:#27ae60;">CTF Board</span>
+        </a>
+    </div>
+</div>
+
+<footer>SecureShop &copy; 2024 — For educational purposes only</footer>
+
+<script>
+    if (!localStorage.getItem('ctf_player_name')) {
+        window.location.href = 'welcome.html';
+    }
+</script>
+</body>
+</html>

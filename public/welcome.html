@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop CTF — Enter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c9a84c;
+            --gold-light: #f0d070;
+            --gold-dim: #8a6a20;
+            --bg: #06080a;
+            --surface: #0d1117;
+            --text: #e8dcc8;
+            --muted: #6a5a3a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Crimson Text', serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px; height: 800px;
+            background: radial-gradient(ellipse at center,
+                rgba(201,168,76,0.06) 0%, rgba(201,168,76,0.02) 40%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .particles { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+        .particle {
+            position: absolute; width: 2px; height: 2px;
+            background: var(--gold); border-radius: 50%; opacity: 0;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0%   { opacity: 0; transform: translateY(100vh) translateX(0); }
+            10%  { opacity: 0.6; }
+            90%  { opacity: 0.3; }
+            100% { opacity: 0; transform: translateY(-10vh) translateX(30px); }
+        }
+
+        .corner { position: fixed; width: 120px; height: 120px; opacity: 0.2; }
+        .corner-tl { top: 20px; left: 20px;  border-top: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+        .corner-tr { top: 20px; right: 20px; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+        .corner-bl { bottom: 20px; left: 20px;  border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
+        .corner-br { bottom: 20px; right: 20px; border-bottom: 1px solid var(--gold); border-right: 1px solid var(--gold); }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 2px;
+            padding: 60px 70px;
+            max-width: 560px; width: 90%;
+            text-align: center;
+            position: relative;
+            animation: fadeUp 0.8s ease both;
+            box-shadow: 0 0 60px rgba(201,168,76,0.05), 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(201,168,76,0.08);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 30px; padding: 6px 18px;
+            font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 30px;
+            animation: fadeUp 0.8s 0.1s ease both;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(26px, 5vw, 42px); font-weight: 900;
+            color: var(--gold-light); line-height: 1.15; margin-bottom: 12px;
+            text-shadow: 0 0 40px rgba(201,168,76,0.3);
+            animation: fadeUp 0.8s 0.2s ease both;
+        }
+
+        .subtitle {
+            color: var(--muted); font-size: 16px; font-style: italic;
+            margin-bottom: 40px; line-height: 1.6;
+            animation: fadeUp 0.8s 0.3s ease both;
+        }
+
+        .divider {
+            display: flex; align-items: center; gap: 15px;
+            margin-bottom: 35px;
+            animation: fadeUp 0.8s 0.35s ease both;
+        }
+        .divider::before { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3)); }
+        .divider::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(201,168,76,0.3), transparent); }
+        .divider span { color: var(--gold); font-size: 18px; }
+
+        label {
+            display: block; font-size: 11px; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--muted);
+            margin-bottom: 12px; text-align: left;
+            animation: fadeUp 0.8s 0.4s ease both;
+        }
+
+        .name-input {
+            width: 100%;
+            background: rgba(201,168,76,0.04);
+            border: 1px solid rgba(201,168,76,0.2);
+            border-radius: 2px; padding: 16px 20px;
+            color: var(--gold-light);
+            font-family: 'Crimson Text', serif; font-size: 18px;
+            outline: none; transition: border-color 0.3s, box-shadow 0.3s;
+            text-align: center; letter-spacing: 1px; margin-bottom: 20px;
+            animation: fadeUp 0.8s 0.45s ease both;
+        }
+        .name-input::placeholder { color: var(--muted); font-style: italic; }
+        .name-input:focus {
+            border-color: rgba(201,168,76,0.6);
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.06), 0 0 20px rgba(201,168,76,0.1);
+        }
+        .name-input.shake { animation: shake 0.4s ease; }
+        @keyframes shake {
+            0%,100%{transform:translateX(0)}
+            20%{transform:translateX(-8px)}40%{transform:translateX(8px)}
+            60%{transform:translateX(-5px)}80%{transform:translateX(5px)}
+        }
+
+        .enter-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            color: #0a0800; border: none; padding: 16px; border-radius: 2px;
+            font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700;
+            letter-spacing: 4px; text-transform: uppercase; cursor: pointer;
+            transition: all 0.3s;
+            animation: fadeUp 0.8s 0.5s ease both;
+            position: relative; overflow: hidden;
+        }
+        .enter-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+            transition: left 0.4s;
+        }
+        .enter-btn:hover::before { left: 100%; }
+        .enter-btn:hover { box-shadow: 0 0 30px rgba(201,168,76,0.3); transform: translateY(-1px); }
+        .enter-btn:active { transform: translateY(0); }
+
+        .stats {
+            display: flex; justify-content: center; gap: 40px;
+            margin-top: 35px; padding-top: 25px;
+            border-top: 1px solid rgba(201,168,76,0.1);
+            animation: fadeUp 0.8s 0.6s ease both;
+        }
+        .stat { text-align: center; }
+        .stat-num { font-family: 'Cinzel', serif; font-size: 22px; color: var(--gold); display: block; }
+        .stat-label { font-size: 11px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+
+        .error-msg { color: #e05050; font-size: 14px; font-style: italic; margin-bottom: 15px; min-height: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+
+<div class="card">
+    <div class="badge"><span>💀</span> CTF Challenge <span>💀</span></div>
+    <h1>PHANTOM<br>SHELL CTF</h1>
+    <p class="subtitle">A web security challenge crafted for the curious.<br>Can you find all the flags hidden within?</p>
+    <div class="divider"><span>⚔</span></div>
+    <label>Your Name — for the Hall of Fame</label>
+    <input class="name-input" type="text" id="nameInput" placeholder="Enter your hacker alias..." maxlength="40" autocomplete="off">
+    <div class="error-msg" id="errorMsg"></div>
+    <button class="enter-btn" onclick="enterChallenge()">Begin The Challenge →</button>
+    <div class="stats">
+        <div class="stat"><span class="stat-num">5</span><span class="stat-label">Challenges</span></div>
+        <div class="stat"><span class="stat-num">1050</span><span class="stat-label">Total Points</span></div>
+        <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Fun</span></div>
+    </div>
+</div>
+
+<script>
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 25; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (8 + Math.random() * 12) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+        container.appendChild(p);
+    }
+
+    function enterChallenge() {
+        const input = document.getElementById('nameInput');
+        const err = document.getElementById('errorMsg');
+        const name = input.value.trim();
+        if (!name || name.length < 2) {
+            err.textContent = '✦ Please enter your name (min 2 characters).';
+            input.classList.remove('shake');
+            void input.offsetWidth;
+            input.classList.add('shake');
+            return;
+        }
+        err.textContent = '';
+        localStorage.setItem('ctf_player_name', name);
+        window.location.href = 'index.html';
+    }
+
+    document.getElementById('nameInput').addEventListener('keydown', e => {
+        if (e.key === 'Enter') enterChallenge();
+    });
+
+    if (localStorage.getItem('ctf_player_name')) {
+        window.location.href = 'index.html';
+    }
+</script>
+</body>
+</html>

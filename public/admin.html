@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop - Admin</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+    <a class="logo" href="index.html">🛒 SecureShop</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="comment.html">Community</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="flags.html">🚩 Flags</a></li>
+    </ul>
+</nav>
+
+<div class="container" style="max-width:450px;">
+    <h2>⚙️ Admin Panel</h2>
+    <p style="color:#777; margin-bottom:20px;">Restricted area. Authorized personnel only.</p>
+
+    <div id="login-form">
+        <label>Admin Username</label>
+        <input type="text" id="adminUser" placeholder="Username">
+
+        <label>Admin Password</label>
+        <input type="password" id="adminPass" placeholder="Password">
+        <p class="hint">💡 Hint: Check the page source / JS file</p>
+
+        <button onclick="checkAdmin()">Enter</button>
+        <div id="admin-msg" style="margin-top:15px;"></div>
+    </div>
+
+    <div id="admin-content" style="display:none;">
+        <div class="alert alert-success">✅ Access granted! Welcome, Admin.</div>
+        <div class="flag-box">🚩 FLAG{js_source_hunter}</div>
+        <hr style="margin:25px 0;">
+        <h3>User Database</h3>
+        <table>
+            <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th></tr>
+            <tr><td>1</td><td>admin</td><td>admin@secureshop.com</td><td>Admin</td></tr>
+            <tr><td>2</td><td>john</td><td>john@example.com</td><td>User</td></tr>
+            <tr><td>3</td><td>alice</td><td>alice@example.com</td><td>User</td></tr>
+        </table>
+    </div>
+</div>
+
+<footer>SecureShop &copy; 2024 — For educational purposes only</footer>
+<script src="js/app.js"></script>
+</body>
+</html>
