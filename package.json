@@ -1,8 +1,5 @@
 {
   "name": "phantom-shell-ctf",
   "version": "1.0.0",
-  "description": "Phantom Shell CTF - Web Security Challenge",
-  "dependencies": {
-    "better-sqlite3": "^9.4.3"
-  }
+  "description": "Phantom Shell CTF - Web Security Challenge"
 }
