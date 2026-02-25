@@ -28,7 +28,7 @@
 
         <label>Comment</label>
         <textarea id="comment" rows="4" placeholder="Write something..."></textarea>
-        <p class="hint">💡 Hint: Try <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> in the comment field</p>
+        <p class="hint">💡 Hint: What happens when user input is rendered directly on the page?</p>
 
         <button type="submit">Post Comment</button>
     </form>
@@ -58,12 +58,10 @@
                 <div style="border:1px solid #eee; border-radius:8px; padding:15px; margin-bottom:15px;">
                     <strong>${c.name}</strong>
                     <span style="color:#aaa; font-size:12px; margin-left:10px;">${c.created_at}</span>
-                    <!-- VULNERABLE: innerHTML renders XSS payloads -->
                     <p style="margin-top:8px;" class="comment-body"></p>
                 </div>
             `).join('');
 
-            // Inject comment content via innerHTML (INTENTIONALLY VULNERABLE)
             document.querySelectorAll('.comment-body').forEach((el, i) => {
                 el.innerHTML = data.comments[i].comment;
             });
