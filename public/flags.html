@@ -271,17 +271,10 @@
 <footer>PHANTOM SHELL CTF &nbsp;·&nbsp; BY HARSH RAJ &nbsp;·&nbsp; FOR EDUCATIONAL PURPOSES</footer>
 
 <script>
-    // ✅ ZERO flags stored in frontend — all validation is server-side via /api/validate
-
-    const POINTS = {
-        'js_source_hunter':     100,
-        'sql_bypass_master':    200,
-        'union_select_ninja':   300,
-        'xss_stored_pwned':     250,
-        'xss_reflected_gotcha': 200,
-    };
+    // ✅ ZERO flags, ZERO keys, ZERO points stored in frontend — all server-side via /api/validate
 
     let captured = JSON.parse(localStorage.getItem('ctf_flags') || '[]');
+    // captured stores objects: { key, points } after server validates
     const playerName = localStorage.getItem('ctf_player_name') || 'Anonymous';
 
     if (!localStorage.getItem('ctf_player_name')) window.location.href = 'welcome.html';
@@ -298,15 +291,15 @@
         const count = captured.length;
         document.getElementById('captured-count').textContent = count;
         document.getElementById('progress-fill').style.width = (count / 5 * 100) + '%';
-        captured.forEach(key => {
-            const card = document.getElementById('card-' + key);
-            const status = document.getElementById('status-' + key);
-            const pts = document.getElementById('pts-' + key);
+        captured.forEach(item => {
+            const card = document.getElementById('card-' + item.key);
+            const status = document.getElementById('status-' + item.key);
+            const pts = document.getElementById('pts-' + item.key);
             if (card) {
                 card.classList.add('captured');
                 status.textContent = 'CAPTURED';
                 status.className = 'flag-status done';
-                pts.textContent = POINTS[key] + ' pts';
+                pts.textContent = item.points + ' pts';
             }
         });
         if (count === 5) setTimeout(() => showCertificate(), 800);
@@ -349,17 +342,16 @@
                 return;
             }
 
-            // Server returns the key name like "js_source_hunter"
             const key = data.key;
 
-            if (captured.includes(key)) {
+            if (captured.find(i => i.key === key)) {
                 feedback.className = 'feedback already';
                 feedback.textContent = '> Already captured this flag!';
                 btn.disabled = false;
                 return;
             }
 
-            captured.push(key);
+            captured.push({ key, points: data.points });
             save();
 
             const btnRect = btn.getBoundingClientRect();
