@@ -1,7 +1,5 @@
 // api/comment.js - Intentionally vulnerable to Stored XSS for CTF purposes
-// Uses in-memory store (resets on cold start - fine for CTF demo)
 
-// In-memory comment store
 const comments = [
   {
     id: 1,
@@ -27,7 +25,6 @@ export default function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
-    // Return comments - RAW, unsanitized (intentionally vulnerable)
     return res.status(200).json({ comments });
   }
 
@@ -42,7 +39,7 @@ export default function handler(req, res) {
     const newComment = {
       id: nextId++,
       name: name.trim() || 'Anonymous',
-      comment: comment, // NO sanitization - intentional for XSS CTF
+      comment: comment,
       created_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
     };
 

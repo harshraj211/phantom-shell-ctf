@@ -4,6 +4,58 @@
     <meta charset="UTF-8">
     <title>SecureShop - Community</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .xss-flag-banner {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .xss-flag-banner.show { display: flex; }
+        .xss-flag-inner {
+            background: #1e1e1e;
+            border: 2px solid #00ff88;
+            border-radius: 12px;
+            padding: 40px 50px;
+            text-align: center;
+            max-width: 500px;
+        }
+        .xss-flag-inner h2 {
+            color: #00ff88;
+            font-size: 28px;
+            margin-bottom: 10px;
+            border: none;
+        }
+        .xss-flag-inner p {
+            color: #aaa;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        .xss-flag-value {
+            background: #0a0a0a;
+            color: #00ff88;
+            font-family: monospace;
+            font-size: 20px;
+            padding: 15px 20px;
+            border-radius: 6px;
+            border: 1px solid #00ff88;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+        .xss-close-btn {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 
@@ -18,6 +70,16 @@
         <li><a href="flags.html">🚩 Flags</a></li>
     </ul>
 </nav>
+
+<!-- XSS Flag Banner — triggered by successful XSS -->
+<div class="xss-flag-banner" id="xssBanner">
+    <div class="xss-flag-inner">
+        <h2>🎉 XSS Triggered!</h2>
+        <p>You successfully injected a script into the page.<br>Here is your flag:</p>
+        <div class="xss-flag-value">FLAG{xss_stored_pwned}</div>
+        <button class="xss-close-btn" onclick="document.getElementById('xssBanner').classList.remove('show')">Got it!</button>
+    </div>
+</div>
 
 <div class="container">
     <h2>💬 Community Board</h2>
@@ -43,6 +105,18 @@
 <footer>SecureShop &copy; 2024 — For educational purposes only</footer>
 
 <script>
+    // This is the function XSS payloads will trigger
+    // When someone injects <script>xssSuccess()</script> or uses onerror= etc.
+    window.xssSuccess = function() {
+        document.getElementById('xssBanner').classList.add('show');
+    };
+
+    // Override alert so if they use alert() it shows the flag banner instead
+    window._origAlert = window.alert;
+    window.alert = function(msg) {
+        document.getElementById('xssBanner').classList.add('show');
+    };
+
     async function loadComments() {
         const list = document.getElementById('comments-list');
         try {
@@ -62,9 +136,11 @@
                 </div>
             `).join('');
 
+            // VULNERABLE: innerHTML renders XSS payloads
             document.querySelectorAll('.comment-body').forEach((el, i) => {
                 el.innerHTML = data.comments[i].comment;
             });
+
         } catch (err) {
             list.innerHTML = '<div class="alert alert-danger">Failed to load comments.</div>';
         }
