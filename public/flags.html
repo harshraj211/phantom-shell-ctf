@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>SecureShop — Flag Checker</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <!-- html2canvas for certificate download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
@@ -19,67 +18,23 @@
             --gold: #c9a84c;
             --gold-light: #f0d070;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Share Tech Mono', monospace;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg, transparent, transparent 2px,
-                rgba(0,255,136,0.012) 2px, rgba(0,255,136,0.012) 4px
-            );
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        .bg-grid {
-            position: fixed; inset: 0;
-            background-image:
-                linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
-            pointer-events: none;
-        }
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 40px 40px; }
-        }
-
-        nav {
-            background: rgba(10,14,10,0.95);
-            border-bottom: 1px solid var(--border);
-            padding: 15px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(10px);
-            position: sticky; top: 0; z-index: 100;
-        }
+        body { background: var(--bg); color: var(--text); font-family: 'Share Tech Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,255,136,0.012) 2px, rgba(0,255,136,0.012) 4px); pointer-events: none; z-index: 999; }
+        .bg-grid { position: fixed; inset: 0; background-image: linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px); background-size: 40px 40px; animation: gridMove 20s linear infinite; pointer-events: none; }
+        @keyframes gridMove { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
+        nav { background: rgba(10,14,10,0.95); border-bottom: 1px solid var(--border); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 100; }
         nav .logo { color: var(--green); font-family: 'Orbitron', sans-serif; font-size: 18px; text-decoration: none; letter-spacing: 2px; }
         nav .logo span { color: var(--text); }
         nav ul { list-style: none; display: flex; gap: 25px; }
         nav ul li a { color: var(--muted); text-decoration: none; font-size: 13px; letter-spacing: 1px; transition: color 0.2s; }
         nav ul li a:hover { color: var(--green); }
-
         .main { max-width: 800px; margin: 0 auto; padding: 60px 20px; position: relative; z-index: 1; }
-
         .header { text-align: center; margin-bottom: 50px; }
         .header .eyebrow { color: var(--green); font-size: 12px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; opacity: 0.7; }
         .header h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(28px, 5vw, 46px); font-weight: 900; color: var(--green); text-shadow: 0 0 30px rgba(0,255,136,0.4); letter-spacing: 3px; margin-bottom: 10px; }
         .header .player-name { color: var(--green); font-size: 14px; letter-spacing: 2px; margin-top: 8px; }
         .header .player-name span { color: var(--gold-light); font-family: 'Cinzel', serif; }
-
         .progress-section { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 25px 30px; margin-bottom: 35px; }
         .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .progress-label { font-size: 12px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
@@ -87,7 +42,6 @@
         .progress-count span { color: var(--muted); font-size: 14px; }
         .progress-bar-wrap { background: rgba(0,255,136,0.05); border: 1px solid var(--border); border-radius: 2px; height: 8px; overflow: hidden; }
         .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green-dim), var(--green)); border-radius: 2px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 10px rgba(0,255,136,0.5); width: 0%; }
-
         .submit-section { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 30px; margin-bottom: 35px; }
         .submit-section label { display: block; font-size: 12px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
         .input-row { display: flex; gap: 10px; }
@@ -98,18 +52,19 @@
         @keyframes shake { 0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)} }
         .submit-btn { background: var(--green); color: #000; border: none; padding: 14px 28px; border-radius: 3px; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
         .submit-btn:hover { background: #fff; box-shadow: 0 0 20px rgba(0,255,136,0.4); transform: translateY(-1px); }
+        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .feedback { margin-top: 14px; font-size: 13px; letter-spacing: 1px; min-height: 20px; }
         .feedback.success { color: var(--green); }
         .feedback.error { color: var(--red); }
         .feedback.already { color: #ffaa00; }
-
+        .feedback.loading { color: var(--muted); }
         .flags-section h2 { font-family: 'Orbitron', sans-serif; font-size: 14px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
         .flag-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 20px 25px; margin-bottom: 12px; display: flex; align-items: center; gap: 20px; transition: border-color 0.3s; position: relative; overflow: hidden; }
         .flag-card.captured { border-color: var(--green); background: rgba(0,255,136,0.04); }
         .flag-card.captured::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--green); box-shadow: 0 0 10px var(--green); }
         .flag-card.just-captured { animation: captureFlash 0.6s ease; }
         @keyframes captureFlash { 0%{box-shadow:0 0 0 rgba(0,255,136,0)}30%{box-shadow:0 0 40px rgba(0,255,136,0.4)}100%{box-shadow:0 0 0 rgba(0,255,136,0)} }
-        .flag-icon { width: 42px; height: 42px; border-radius: 3px; background: rgba(0,255,136,0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; transition: background 0.3s, border-color 0.3s; }
+        .flag-icon { width: 42px; height: 42px; border-radius: 3px; background: rgba(0,255,136,0.05); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
         .flag-card.captured .flag-icon { background: rgba(0,255,136,0.1); border-color: var(--green); }
         .flag-info { flex: 1; }
         .flag-name { font-size: 15px; color: var(--text); margin-bottom: 4px; letter-spacing: 1px; }
@@ -118,294 +73,52 @@
         .flag-status { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; border: 1px solid; white-space: nowrap; }
         .flag-status.pending { color: var(--muted); border-color: var(--border); }
         .flag-status.done { color: var(--green); border-color: var(--green); background: rgba(0,255,136,0.08); }
-        .flag-points { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--muted); min-width: 60px; text-align: right; transition: color 0.3s; }
+        .flag-points { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--muted); min-width: 60px; text-align: right; }
         .flag-card.captured .flag-points { color: var(--green); }
-
-        /* ===== CERTIFICATE MODAL ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.92);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
-        }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.show { display: flex; }
-        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-        .modal-inner {
-            max-width: 900px;
-            width: 100%;
-            animation: slideUp 0.4s ease;
-        }
-        @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border-radius: 3px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            text-decoration: none;
-        }
-
+        .modal-inner { max-width: 900px; width: 100%; }
+        .modal-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .action-btn { display: flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 3px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; border: none; }
         .btn-download { background: var(--green); color: #000; }
-        .btn-download:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 0 20px rgba(0,255,136,0.4); }
-
+        .btn-download:hover { background: #fff; }
         .btn-linkedin { background: #0077b5; color: #fff; }
-        .btn-linkedin:hover { background: #0099e0; transform: translateY(-1px); }
-
+        .btn-linkedin:hover { background: #0099e0; }
         .btn-close { background: transparent; color: var(--muted); border: 1px solid var(--border); }
         .btn-close:hover { color: var(--red); border-color: var(--red); }
-
-        /* ===== CERTIFICATE DESIGN ===== */
-        #certificate {
-            background: #faf6ee;
-            width: 100%;
-            aspect-ratio: 1.414 / 1;
-            position: relative;
-            overflow: hidden;
-            font-family: 'Crimson Text', serif;
-            color: #1a1008;
-            border-radius: 4px;
-        }
-
-        /* Outer border */
-        #certificate .cert-outer-border {
-            position: absolute;
-            inset: 12px;
-            border: 2px solid #c9a84c;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        /* Inner border */
-        #certificate .cert-inner-border {
-            position: absolute;
-            inset: 18px;
-            border: 1px solid rgba(201,168,76,0.4);
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        /* Corner ornaments */
-        #certificate .cert-corner {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            z-index: 3;
-        }
-        #certificate .cert-corner::before,
-        #certificate .cert-corner::after {
-            content: '';
-            position: absolute;
-            background: #c9a84c;
-        }
+        #certificate { background: #faf6ee; width: 100%; aspect-ratio: 1.414 / 1; position: relative; overflow: hidden; font-family: 'Crimson Text', serif; color: #1a1008; border-radius: 4px; }
+        #certificate .cert-outer-border { position: absolute; inset: 12px; border: 2px solid #c9a84c; pointer-events: none; z-index: 2; }
+        #certificate .cert-inner-border { position: absolute; inset: 18px; border: 1px solid rgba(201,168,76,0.4); pointer-events: none; z-index: 2; }
+        #certificate .cert-corner { position: absolute; width: 50px; height: 50px; z-index: 3; }
+        #certificate .cert-corner::before, #certificate .cert-corner::after { content: ''; position: absolute; background: #c9a84c; }
         #certificate .cert-corner::before { width: 100%; height: 2px; top: 0; }
         #certificate .cert-corner::after { width: 2px; height: 100%; left: 0; }
         #certificate .cert-corner.tl { top: 12px; left: 12px; }
         #certificate .cert-corner.tr { top: 12px; right: 12px; transform: scaleX(-1); }
         #certificate .cert-corner.bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
         #certificate .cert-corner.br { bottom: 12px; right: 12px; transform: scale(-1); }
-
-        /* Background watermark */
-        #certificate .cert-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 180px;
-            opacity: 0.04;
-            font-family: 'Cinzel', serif;
-            font-weight: 900;
-            color: #c9a84c;
-            white-space: nowrap;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        #certificate .cert-body {
-            position: absolute;
-            inset: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            z-index: 4;
-            padding: 10px 40px;
-        }
-
-        #certificate .cert-top-emblem {
-            font-size: 36px;
-            margin-bottom: 8px;
-            line-height: 1;
-        }
-
-        #certificate .cert-org {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(9px, 1.5vw, 13px);
-            letter-spacing: 5px;
-            color: #c9a84c;
-            text-transform: uppercase;
-            margin-bottom: 14px;
-        }
-
-        #certificate .cert-divider {
-            width: 200px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #c9a84c, transparent);
-            margin: 0 auto 14px;
-        }
-
-        #certificate .cert-presents {
-            font-size: clamp(10px, 1.4vw, 13px);
-            color: #8a7050;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        #certificate .cert-title {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(16px, 2.5vw, 22px);
-            font-weight: 900;
-            color: #1a1008;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            line-height: 1.3;
-        }
-
-        #certificate .cert-subtitle {
-            font-size: clamp(9px, 1.3vw, 12px);
-            color: #8a7050;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
-
-        #certificate .cert-to {
-            font-size: clamp(10px, 1.5vw, 13px);
-            color: #5a4030;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-        }
-
-        #certificate .cert-name {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(22px, 4vw, 38px);
-            font-weight: 700;
-            color: #c9a84c;
-            text-shadow: 0 1px 3px rgba(201,168,76,0.3);
-            margin-bottom: 6px;
-            line-height: 1.2;
-        }
-
-        #certificate .cert-line {
-            width: 280px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #c9a84c, transparent);
-            margin: 0 auto 16px;
-        }
-
-        #certificate .cert-body-text {
-            font-size: clamp(9px, 1.3vw, 12px);
-            color: #5a4030;
-            max-width: 480px;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-
-        #certificate .cert-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            width: 100%;
-            padding: 0 20px;
-            margin-top: auto;
-        }
-
+        #certificate .cert-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 180px; opacity: 0.04; font-family: 'Cinzel', serif; font-weight: 900; color: #c9a84c; white-space: nowrap; pointer-events: none; z-index: 1; }
+        #certificate .cert-body { position: absolute; inset: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 4; padding: 10px 40px; }
+        #certificate .cert-top-emblem { font-size: 36px; margin-bottom: 8px; }
+        #certificate .cert-org { font-family: 'Cinzel', serif; font-size: clamp(9px, 1.5vw, 13px); letter-spacing: 5px; color: #c9a84c; text-transform: uppercase; margin-bottom: 14px; }
+        #certificate .cert-divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); margin: 0 auto 14px; }
+        #certificate .cert-presents { font-size: clamp(10px, 1.4vw, 13px); color: #8a7050; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+        #certificate .cert-name { font-family: 'Cinzel', serif; font-size: clamp(22px, 4vw, 38px); font-weight: 700; color: #c9a84c; margin-bottom: 6px; }
+        #certificate .cert-line { width: 280px; height: 1px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); margin: 0 auto 16px; }
+        #certificate .cert-title { font-family: 'Cinzel', serif; font-size: clamp(16px, 2.5vw, 22px); font-weight: 900; color: #1a1008; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
+        #certificate .cert-subtitle { font-size: clamp(9px, 1.3vw, 12px); color: #8a7050; letter-spacing: 2px; margin-bottom: 20px; }
+        #certificate .cert-body-text { font-size: clamp(9px, 1.3vw, 12px); color: #5a4030; max-width: 480px; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+        #certificate .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; padding: 0 20px; margin-top: auto; }
         #certificate .cert-sig-block { text-align: center; }
-
-        #certificate .cert-sig {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(11px, 1.8vw, 16px);
-            font-weight: 700;
-            color: #1a1008;
-            border-bottom: 1px solid #c9a84c;
-            padding-bottom: 4px;
-            margin-bottom: 4px;
-        }
-
-        #certificate .cert-sig-label {
-            font-size: clamp(7px, 1vw, 10px);
-            letter-spacing: 2px;
-            color: #8a7050;
-            text-transform: uppercase;
-        }
-
-        #certificate .cert-badge-center {
-            text-align: center;
-        }
-
-        #certificate .cert-badge-icon {
-            width: clamp(45px, 7vw, 65px);
-            height: clamp(45px, 7vw, 65px);
-            background: radial-gradient(circle at 40% 40%, #f0d070, #c9a84c, #8a6a20);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(20px, 3vw, 28px);
-            margin: 0 auto 4px;
-            box-shadow: 0 3px 12px rgba(201,168,76,0.4);
-        }
-
-        #certificate .cert-badge-text {
-            font-size: clamp(6px, 0.9vw, 9px);
-            letter-spacing: 2px;
-            color: #c9a84c;
-            text-transform: uppercase;
-        }
-
-        #certificate .cert-date-block {
-            font-size: clamp(8px, 1vw, 11px);
-            color: #8a7050;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        #certificate .cert-date-label {
-            font-size: clamp(6px, 0.9vw, 9px);
-            letter-spacing: 2px;
-            color: #aaa090;
-            text-transform: uppercase;
-            margin-bottom: 3px;
-        }
-
-        /* Particle burst */
+        #certificate .cert-sig { font-family: 'Cinzel', serif; font-size: clamp(11px, 1.8vw, 16px); font-weight: 700; color: #1a1008; border-bottom: 1px solid #c9a84c; padding-bottom: 4px; margin-bottom: 4px; }
+        #certificate .cert-sig-label { font-size: clamp(7px, 1vw, 10px); letter-spacing: 2px; color: #8a7050; text-transform: uppercase; }
+        #certificate .cert-badge-center { text-align: center; }
+        #certificate .cert-badge-icon { width: clamp(45px, 7vw, 65px); height: clamp(45px, 7vw, 65px); background: radial-gradient(circle at 40% 40%, #f0d070, #c9a84c, #8a6a20); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(20px, 3vw, 28px); margin: 0 auto 4px; box-shadow: 0 3px 12px rgba(201,168,76,0.4); }
+        #certificate .cert-badge-text { font-size: clamp(6px, 0.9vw, 9px); letter-spacing: 2px; color: #c9a84c; text-transform: uppercase; }
+        #certificate .cert-date-block { font-size: clamp(8px, 1vw, 11px); color: #8a7050; text-align: center; }
+        #certificate .cert-date-label { font-size: clamp(6px, 0.9vw, 9px); letter-spacing: 2px; color: #aaa090; text-transform: uppercase; margin-bottom: 3px; }
         .particle { position: fixed; pointer-events: none; font-size: 16px; animation: particleFly 1s ease-out forwards; z-index: 9999; }
         @keyframes particleFly { 0%{opacity:1;transform:translate(0,0) scale(1)} 100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.3)} }
-
         footer { text-align: center; padding: 40px; color: var(--muted); font-size: 12px; letter-spacing: 2px; border-top: 1px solid var(--border); position: relative; z-index: 1; }
     </style>
 </head>
@@ -445,7 +158,7 @@
         <label>// Submit Flag</label>
         <div class="input-row">
             <input class="flag-input" type="text" id="flag-input" placeholder="FLAG{...}" autocomplete="off" spellcheck="false">
-            <button class="submit-btn" onclick="submitFlag()">SUBMIT</button>
+            <button class="submit-btn" id="submit-btn" onclick="submitFlag()">SUBMIT</button>
         </div>
         <div class="feedback" id="feedback"></div>
     </div>
@@ -505,22 +218,14 @@
     </div>
 </div>
 
-<!-- ===== CERTIFICATE MODAL ===== -->
+<!-- CERTIFICATE MODAL -->
 <div class="modal-overlay" id="certModal">
     <div class="modal-inner">
         <div class="modal-actions">
-            <button class="action-btn btn-download" onclick="downloadCert()">
-                ⬇ Download Certificate
-            </button>
-            <button class="action-btn btn-linkedin" onclick="shareLinkedIn()">
-                in Share on LinkedIn
-            </button>
-            <button class="action-btn btn-close" onclick="closeModal()">
-                ✕ Close
-            </button>
+            <button class="action-btn btn-download" onclick="downloadCert()">⬇ Download Certificate</button>
+            <button class="action-btn btn-linkedin" onclick="shareLinkedIn()">in Share on LinkedIn</button>
+            <button class="action-btn btn-close" onclick="closeModal()">✕ Close</button>
         </div>
-
-        <!-- THE CERTIFICATE -->
         <div id="certificate">
             <div class="cert-outer-border"></div>
             <div class="cert-inner-border"></div>
@@ -529,38 +234,30 @@
             <div class="cert-corner bl"></div>
             <div class="cert-corner br"></div>
             <div class="cert-watermark">CTF</div>
-
             <div class="cert-body">
                 <div class="cert-top-emblem">🛡️</div>
                 <div class="cert-org">Phantom Shell CTF · SecureShop Labs</div>
                 <div class="cert-divider"></div>
-
                 <div class="cert-presents">This Certificate is Proudly Presented To</div>
-
                 <div class="cert-name" id="cert-player-name">—</div>
                 <div class="cert-line"></div>
-
                 <div class="cert-title">Certificate of Completion</div>
                 <div class="cert-subtitle">PHANTOM SHELL CTF — WEB SECURITY CHALLENGE</div>
-
                 <div class="cert-body-text">
                     For successfully identifying and exploiting all five web vulnerabilities including
                     SQL Injection, Authentication Bypass, UNION-based Data Extraction,
                     Stored XSS, and Reflected XSS — demonstrating exceptional skill
                     in web application security and ethical hacking.
                 </div>
-
                 <div class="cert-footer">
                     <div class="cert-sig-block">
                         <div class="cert-sig">Harsh Raj</div>
                         <div class="cert-sig-label">Creator &amp; Certifier</div>
                     </div>
-
                     <div class="cert-badge-center">
                         <div class="cert-badge-icon">🏆</div>
                         <div class="cert-badge-text">All Flags<br>Captured</div>
                     </div>
-
                     <div class="cert-date-block">
                         <div class="cert-date-label">Date Issued</div>
                         <div id="cert-date">—</div>
@@ -574,13 +271,7 @@
 <footer>PHANTOM SHELL CTF &nbsp;·&nbsp; BY HARSH RAJ &nbsp;·&nbsp; FOR EDUCATIONAL PURPOSES</footer>
 
 <script>
-    const FLAGS = {
-        'FLAG{js_source_hunter}':      'js_source_hunter',
-        'FLAG{sql_bypass_master}':     'sql_bypass_master',
-        'FLAG{union_select_ninja}':    'union_select_ninja',
-        'FLAG{xss_stored_pwned}':      'xss_stored_pwned',
-        'FLAG{xss_reflected_gotcha}':  'xss_reflected_gotcha',
-    };
+    // ✅ ZERO flags stored in frontend — all validation is server-side via /api/validate
 
     const POINTS = {
         'js_source_hunter':     100,
@@ -593,20 +284,13 @@
     let captured = JSON.parse(localStorage.getItem('ctf_flags') || '[]');
     const playerName = localStorage.getItem('ctf_player_name') || 'Anonymous';
 
-    // Set player name display
+    if (!localStorage.getItem('ctf_player_name')) window.location.href = 'welcome.html';
+
     document.getElementById('player-display').textContent = playerName;
     document.getElementById('cert-player-name').textContent = playerName;
-
-    // Set cert date
-    const now = new Date();
-    document.getElementById('cert-date').textContent = now.toLocaleDateString('en-IN', {
+    document.getElementById('cert-date').textContent = new Date().toLocaleDateString('en-IN', {
         day: 'numeric', month: 'long', year: 'numeric'
     });
-
-    // Redirect to welcome if no name
-    if (!localStorage.getItem('ctf_player_name')) {
-        window.location.href = 'welcome.html';
-    }
 
     function save() { localStorage.setItem('ctf_flags', JSON.stringify(captured)); }
 
@@ -614,7 +298,6 @@
         const count = captured.length;
         document.getElementById('captured-count').textContent = count;
         document.getElementById('progress-fill').style.width = (count / 5 * 100) + '%';
-
         captured.forEach(key => {
             const card = document.getElementById('card-' + key);
             const status = document.getElementById('status-' + key);
@@ -626,79 +309,13 @@
                 pts.textContent = POINTS[key] + ' pts';
             }
         });
-
-        if (count === 5) {
-            setTimeout(() => {
-                showCertificate();
-            }, 800);
-        }
+        if (count === 5) setTimeout(() => showCertificate(), 800);
     }
 
-    function showCertificate() {
-        document.getElementById('certModal').classList.add('show');
-    }
-
-    function closeModal() {
-        document.getElementById('certModal').classList.remove('show');
-    }
-
-    // Close modal on overlay click
-    document.getElementById('certModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
-
-    function downloadCert() {
-        const cert = document.getElementById('certificate');
-        html2canvas(cert, {
-            scale: 3,
-            useCORS: true,
-            backgroundColor: '#faf6ee',
-            logging: false
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `PhantomShell_CTF_Certificate_${playerName.replace(/\s+/g,'_')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-    }
-
-    function shareLinkedIn() {
-        const text = encodeURIComponent(
-            `🏆 I just completed the Phantom Shell CTF by Harsh Raj!\n\n` +
-            `Successfully exploited all 5 web vulnerabilities:\n` +
-            `✅ SQL Injection (Auth Bypass)\n` +
-            `✅ UNION-based SQLi\n` +
-            `✅ Stored XSS\n` +
-            `✅ Reflected XSS\n` +
-            `✅ Broken Authentication\n\n` +
-            `Total Score: 1050 pts 🔐\n\n` +
-            `#CTF #WebSecurity #EthicalHacking #CyberSecurity #InfoSec`
-        );
-        const url = `https://www.linkedin.com/sharing/share-offsite/?url=https://linkedin.com&summary=${text}`;
-        window.open(url, '_blank', 'width=600,height=600');
-    }
-
-    function spawnParticles(x, y) {
-        const emojis = ['✨','⚡','🚩','💚','🟢','⭐'];
-        for (let i = 0; i < 12; i++) {
-            const el = document.createElement('div');
-            el.className = 'particle';
-            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            const angle = (Math.PI * 2 / 12) * i;
-            const dist = 80 + Math.random() * 100;
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
-            el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-            el.style.setProperty('--ty', Math.sin(angle) * dist - 50 + 'px');
-            el.style.animationDelay = (Math.random() * 0.1) + 's';
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 1200);
-        }
-    }
-
-    function submitFlag() {
+    async function submitFlag() {
         const input = document.getElementById('flag-input');
         const feedback = document.getElementById('feedback');
+        const btn = document.getElementById('submit-btn');
         const val = input.value.trim();
 
         input.classList.remove('error');
@@ -711,39 +328,109 @@
             return;
         }
 
-        const key = FLAGS[val];
+        btn.disabled = true;
+        feedback.className = 'feedback loading';
+        feedback.textContent = '> Verifying with server...';
 
-        if (!key) {
-            input.classList.add('error');
+        try {
+            // ✅ Send flag to server for validation — no flag values in this file
+            const res = await fetch('/api/validate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ flag: val })
+            });
+            const data = await res.json();
+
+            if (!data.valid) {
+                input.classList.add('error');
+                feedback.className = 'feedback error';
+                feedback.textContent = '> INVALID FLAG — Keep digging.';
+                btn.disabled = false;
+                return;
+            }
+
+            // Server returns the key name like "js_source_hunter"
+            const key = data.key;
+
+            if (captured.includes(key)) {
+                feedback.className = 'feedback already';
+                feedback.textContent = '> Already captured this flag!';
+                btn.disabled = false;
+                return;
+            }
+
+            captured.push(key);
+            save();
+
+            const btnRect = btn.getBoundingClientRect();
+            spawnParticles(btnRect.left + btnRect.width / 2, btnRect.top + btnRect.height / 2);
+
+            const card = document.getElementById('card-' + key);
+            if (card) {
+                card.classList.add('just-captured');
+                setTimeout(() => card.classList.remove('just-captured'), 700);
+            }
+
+            feedback.className = 'feedback success';
+            feedback.textContent = captured.length === 5
+                ? `> 🏆 FINAL FLAG! All challenges complete! Generating certificate...`
+                : `> FLAG CAPTURED! +${data.points} pts`;
+
+            input.value = '';
+            updateUI();
+
+        } catch (err) {
             feedback.className = 'feedback error';
-            feedback.textContent = '> INVALID FLAG — Keep digging.';
-            return;
+            feedback.textContent = '> Server error. Try again.';
         }
 
-        if (captured.includes(key)) {
-            feedback.className = 'feedback already';
-            feedback.textContent = '> Already captured this flag!';
-            return;
+        btn.disabled = false;
+    }
+
+    function showCertificate() { document.getElementById('certModal').classList.add('show'); }
+    function closeModal() { document.getElementById('certModal').classList.remove('show'); }
+
+    document.getElementById('certModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    function downloadCert() {
+        html2canvas(document.getElementById('certificate'), {
+            scale: 3, useCORS: true, backgroundColor: '#faf6ee', logging: false
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `PhantomShell_CTF_${playerName.replace(/\s+/g,'_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    function shareLinkedIn() {
+        const text = encodeURIComponent(
+            `🏆 I just completed the Phantom Shell CTF by Harsh Raj!\n\n` +
+            `Successfully exploited all 5 web vulnerabilities:\n` +
+            `✅ SQL Injection (Auth Bypass)\n✅ UNION-based SQLi\n` +
+            `✅ Stored XSS\n✅ Reflected XSS\n✅ Broken Authentication\n\n` +
+            `Total Score: 1050 pts 🔐\n\n#CTF #WebSecurity #EthicalHacking #CyberSecurity`
+        );
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://linkedin.com&summary=${text}`, '_blank', 'width=600,height=600');
+    }
+
+    function spawnParticles(x, y) {
+        const emojis = ['✨','⚡','🚩','💚','🟢','⭐'];
+        for (let i = 0; i < 12; i++) {
+            const el = document.createElement('div');
+            el.className = 'particle';
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            const angle = (Math.PI * 2 / 12) * i;
+            const dist = 80 + Math.random() * 100;
+            el.style.left = x + 'px'; el.style.top = y + 'px';
+            el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+            el.style.setProperty('--ty', Math.sin(angle) * dist - 50 + 'px');
+            el.style.animationDelay = (Math.random() * 0.1) + 's';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1200);
         }
-
-        captured.push(key);
-        save();
-
-        const btn = document.querySelector('.submit-btn');
-        const rect = btn.getBoundingClientRect();
-        spawnParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
-
-        const card = document.getElementById('card-' + key);
-        card.classList.add('just-captured');
-        setTimeout(() => card.classList.remove('just-captured'), 700);
-
-        feedback.className = 'feedback success';
-        feedback.textContent = captured.length === 5
-            ? `> 🏆 FINAL FLAG! All challenges complete! Generating certificate...`
-            : `> FLAG CAPTURED! +${POINTS[key]} pts`;
-
-        input.value = '';
-        updateUI();
     }
 
     document.getElementById('flag-input').addEventListener('keydown', e => {
