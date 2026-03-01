@@ -147,7 +147,7 @@
     <div class="progress-section">
         <div class="progress-header">
             <span class="progress-label">// Flags Captured</span>
-            <span class="progress-count"><span id="captured-count">0</span> <span>/ 5</span></span>
+            <span class="progress-count"><span id="captured-count">0</span> <span>/ 7</span></span>
         </div>
         <div class="progress-bar-wrap">
             <div class="progress-bar-fill" id="progress-fill"></div>
@@ -169,51 +169,71 @@
         <div class="flag-card" id="card-js_source_hunter">
             <div class="flag-icon">⚙️</div>
             <div class="flag-info">
-                <div class="flag-name">Admin Panel — Broken Auth</div>
-                <div class="flag-meta">Vulnerability: Hardcoded credentials in JS source</div>
+                <div class="flag-name">Admin Panel — Broken Authentication</div>
+                <div class="flag-meta">Vulnerability: Sensitive data exposure in client-side code</div>
             </div>
             <span class="flag-status pending" id="status-js_source_hunter">PENDING</span>
-            <div class="flag-points" id="pts-js_source_hunter">100</div>
+            <div class="flag-points" id="pts-js_source_hunter">100 pts</div>
         </div>
 
         <div class="flag-card" id="card-sql_bypass_master">
             <div class="flag-icon">🔐</div>
             <div class="flag-info">
                 <div class="flag-name">Login Page — SQL Injection</div>
-                <div class="flag-meta">Vulnerability: Authentication bypass via SQLi</div>
+                <div class="flag-meta">Vulnerability: Authentication bypass via comment-based SQLi</div>
             </div>
             <span class="flag-status pending" id="status-sql_bypass_master">PENDING</span>
-            <div class="flag-points" id="pts-sql_bypass_master">200</div>
+            <div class="flag-points" id="pts-sql_bypass_master">300 pts</div>
         </div>
 
         <div class="flag-card" id="card-union_select_ninja">
             <div class="flag-icon">🔍</div>
             <div class="flag-info">
                 <div class="flag-name">Product Search — UNION SQLi</div>
-                <div class="flag-meta">Vulnerability: UNION-based SQL injection data extraction</div>
+                <div class="flag-meta">Vulnerability: Data extraction via UNION-based injection</div>
             </div>
             <span class="flag-status pending" id="status-union_select_ninja">PENDING</span>
-            <div class="flag-points" id="pts-union_select_ninja">300</div>
+            <div class="flag-points" id="pts-union_select_ninja">400 pts</div>
         </div>
 
         <div class="flag-card" id="card-xss_stored_pwned">
             <div class="flag-icon">💬</div>
             <div class="flag-info">
                 <div class="flag-name">Community Board — Stored XSS</div>
-                <div class="flag-meta">Vulnerability: Persistent cross-site scripting</div>
+                <div class="flag-meta">Vulnerability: Persistent cross-site scripting via HTML injection</div>
             </div>
             <span class="flag-status pending" id="status-xss_stored_pwned">PENDING</span>
-            <div class="flag-points" id="pts-xss_stored_pwned">250</div>
+            <div class="flag-points" id="pts-xss_stored_pwned">300 pts</div>
         </div>
 
         <div class="flag-card" id="card-xss_reflected_gotcha">
             <div class="flag-icon">👤</div>
             <div class="flag-info">
                 <div class="flag-name">Profile Page — Reflected XSS</div>
-                <div class="flag-meta">Vulnerability: Reflected cross-site scripting</div>
+                <div class="flag-meta">Vulnerability: Reflected cross-site scripting via URL parameter</div>
             </div>
             <span class="flag-status pending" id="status-xss_reflected_gotcha">PENDING</span>
-            <div class="flag-points" id="pts-xss_reflected_gotcha">200</div>
+            <div class="flag-points" id="pts-xss_reflected_gotcha">250 pts</div>
+        </div>
+
+        <div class="flag-card" id="card-idor_peeking_at_private_data">
+            <div class="flag-icon">🔑</div>
+            <div class="flag-info">
+                <div class="flag-name">Account Page — IDOR</div>
+                <div class="flag-meta">Vulnerability: Insecure Direct Object Reference on user endpoint</div>
+            </div>
+            <span class="flag-status pending" id="status-idor_peeking_at_private_data">PENDING</span>
+            <div class="flag-points" id="pts-idor_peeking_at_private_data">350 pts</div>
+        </div>
+
+        <div class="flag-card" id="card-path_traversal_master">
+            <div class="flag-icon">📁</div>
+            <div class="flag-info">
+                <div class="flag-name">Docs Viewer — Path Traversal</div>
+                <div class="flag-meta">Vulnerability: Directory traversal via filename parameter</div>
+            </div>
+            <span class="flag-status pending" id="status-path_traversal_master">PENDING</span>
+            <div class="flag-points" id="pts-path_traversal_master">400 pts</div>
         </div>
     </div>
 </div>
@@ -302,7 +322,7 @@
                 pts.textContent = item.points + ' pts';
             }
         });
-        if (count === 5) setTimeout(() => showCertificate(), 800);
+        if (count === 7) setTimeout(() => showCertificate(), 800);
     }
 
     async function submitFlag() {
@@ -364,7 +384,7 @@
             }
 
             feedback.className = 'feedback success';
-            feedback.textContent = captured.length === 5
+            feedback.textContent = captured.length === 7
                 ? `> 🏆 FINAL FLAG! All challenges complete! Generating certificate...`
                 : `> FLAG CAPTURED! +${data.points} pts`;
 
@@ -400,10 +420,11 @@
     function shareLinkedIn() {
         const text = encodeURIComponent(
             `🏆 I just completed the Phantom Shell CTF by Harsh Raj!\n\n` +
-            `Successfully exploited all 5 web vulnerabilities:\n` +
-            `✅ SQL Injection (Auth Bypass)\n✅ UNION-based SQLi\n` +
-            `✅ Stored XSS\n✅ Reflected XSS\n✅ Broken Authentication\n\n` +
-            `Total Score: 1050 pts 🔐\n\n#CTF #WebSecurity #EthicalHacking #CyberSecurity`
+            `Successfully exploited all 7 web vulnerabilities:\n` +
+            `✅ Broken Auth (JS Source)\n✅ SQL Injection\n` +
+            `✅ UNION SQLi\n✅ Stored XSS\n✅ Reflected XSS\n` +
+            `✅ IDOR\n✅ Path Traversal\n\n` +
+            `Total Score: 2100 pts 🔐\n\n#CTF #WebSecurity #EthicalHacking #CyberSecurity`
         );
         window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://linkedin.com&summary=${text}`, '_blank', 'width=600,height=600');
     }

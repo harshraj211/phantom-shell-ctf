@@ -1,27 +1,15 @@
-// api/comment.js - Intentionally vulnerable to Stored XSS for CTF purposes
+// api/comment.js - Stored XSS (harder: must use non-obvious payload)
 
 const comments = [
-  {
-    id: 1,
-    name: 'Alice',
-    comment: 'Great platform! Love the products here.',
-    created_at: '2024-01-15 10:30:00'
-  },
-  {
-    id: 2,
-    name: 'Bob',
-    comment: 'Has anyone tried the Gaming Keyboard? Worth it?',
-    created_at: '2024-01-16 14:22:00'
-  }
+  { id: 1, name: 'Alice', comment: 'Great platform! Love the products here.', created_at: '2024-01-15 10:30:00' },
+  { id: 2, name: 'Bob',   comment: 'Has anyone tried the Gaming Keyboard? Worth it?', created_at: '2024-01-16 14:22:00' },
 ];
-
 let nextId = 3;
 
 export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
@@ -30,19 +18,21 @@ export default function handler(req, res) {
 
   if (req.method === 'POST') {
     const { name = 'Anonymous', comment = '' } = req.body || {};
+    if (!comment.trim()) return res.status(400).json({ error: 'Comment cannot be empty.' });
 
-    if (!comment.trim()) {
-      return res.status(400).json({ error: 'Comment cannot be empty.' });
-    }
+    // HARDER: strips <script> and javascript: but NOT svg/img event handlers
+    let sanitized = comment
+      .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
+      .replace(/javascript:/gi, '')
+      .replace(/<script/gi, '');
 
-    // VULNERABLE: storing raw unsanitized input
+    // Still vulnerable to: <svg onload=...>, <img onerror=...>, <details open ontoggle=...>
     const newComment = {
       id: nextId++,
       name: name.trim() || 'Anonymous',
-      comment: comment,
+      comment: sanitized,
       created_at: new Date().toISOString().replace('T', ' ').slice(0, 19)
     };
-
     comments.unshift(newComment);
     return res.status(200).json({ success: true, comment: newComment });
   }

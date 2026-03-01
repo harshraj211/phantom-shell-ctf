@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop - Documentation</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav>
+    <a class="logo" href="index.html">🛒 SecureShop</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="comment.html">Community</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="user.html">Account</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="flags.html">🚩 Flags</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2>📄 Documentation Viewer</h2>
+    <p style="color:#777; margin-bottom:25px;">Browse our platform documentation files.</p>
+
+    <div style="margin-bottom:20px;">
+        <strong>Available files:</strong>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn-small" onclick="loadFile('readme.txt')">readme.txt</button>
+            <button class="btn-small" onclick="loadFile('terms.txt')">terms.txt</button>
+            <button class="btn-small" onclick="loadFile('help.txt')">help.txt</button>
+            <button class="btn-small" onclick="loadFile('changelog.txt')">changelog.txt</button>
+        </div>
+    </div>
+
+    <form onsubmit="loadFileCustom(event)">
+        <label>Or enter filename manually:</label>
+        <div style="display:flex; gap:10px; max-width:400px;">
+            <input type="text" id="filename" placeholder="e.g. readme.txt">
+            <button type="submit">Load</button>
+        </div>
+        <p class="hint">💡 Hint: The server reads files relative to the docs directory</p>
+    </form>
+
+    <div id="file-result" style="margin-top:25px;"></div>
+</div>
+
+<footer>SecureShop &copy; 2024 — For educational purposes only</footer>
+
+<style>
+    .btn-small { padding: 6px 14px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; font-size:13px; }
+    .btn-small:hover { background: #e0e0e0; }
+    .file-viewer { background: #1e1e1e; color: #00ff88; font-family: monospace; padding: 20px; border-radius: 8px; white-space: pre-wrap; font-size: 14px; margin-top: 15px; }
+</style>
+
+<script>
+    async function loadFile(name) {
+        document.getElementById('filename').value = name;
+        const result = document.getElementById('file-result');
+        result.innerHTML = '<p class="loading">Loading...</p>';
+
+        try {
+            const res = await fetch(`/api/file?name=${encodeURIComponent(name)}`);
+            const data = await res.json();
+
+            if (data.error) {
+                result.innerHTML = `<div class="alert alert-danger">❌ ${data.error}</div>`;
+                return;
+            }
+
+            const isFlag = data.content && data.content.startsWith('FLAG{');
+            result.innerHTML = `
+                <p style="color:#777; font-size:13px; margin-bottom:8px;">📄 ${data.filename}</p>
+                <div class="file-viewer" style="${isFlag ? 'color:#e74c3c; font-size:18px; font-weight:bold;' : ''}">${data.content}</div>
+            `;
+        } catch(err) {
+            result.innerHTML = `<div class="alert alert-danger">❌ Request failed.</div>`;
+        }
+    }
+
+    function loadFileCustom(e) {
+        e.preventDefault();
+        const name = document.getElementById('filename').value.trim();
+        if (name) loadFile(name);
+    }
+</script>
+</body>
+</html>

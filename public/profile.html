@@ -4,58 +4,6 @@
     <meta charset="UTF-8">
     <title>SecureShop - Profile</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .xss-flag-banner {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-        }
-        .xss-flag-banner.show { display: flex; }
-        .xss-flag-inner {
-            background: #1e1e1e;
-            border: 2px solid #00ff88;
-            border-radius: 12px;
-            padding: 40px 50px;
-            text-align: center;
-            max-width: 500px;
-        }
-        .xss-flag-inner h2 {
-            color: #00ff88;
-            font-size: 28px;
-            margin-bottom: 10px;
-            border: none;
-        }
-        .xss-flag-inner p {
-            color: #aaa;
-            margin-bottom: 20px;
-            font-size: 15px;
-        }
-        .xss-flag-value {
-            background: #0a0a0a;
-            color: #00ff88;
-            font-family: monospace;
-            font-size: 20px;
-            padding: 15px 20px;
-            border-radius: 6px;
-            border: 1px solid #00ff88;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-        .xss-close-btn {
-            background: #00ff88;
-            color: #000;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
 
@@ -66,20 +14,12 @@
         <li><a href="search.html">Search</a></li>
         <li><a href="comment.html">Community</a></li>
         <li><a href="profile.html">Profile</a></li>
+        <li><a href="user.html">Account</a></li>
+        <li><a href="docs.html">Docs</a></li>
         <li><a href="login.html">Login</a></li>
         <li><a href="flags.html">🚩 Flags</a></li>
     </ul>
 </nav>
-
-<!-- XSS Flag Banner -->
-<div class="xss-flag-banner" id="xssBanner">
-    <div class="xss-flag-inner">
-        <h2>🎉 XSS Triggered!</h2>
-        <p>You successfully injected a script into the page.<br>Here is your flag:</p>
-        <div class="xss-flag-value">FLAG{xss_reflected_gotcha}</div>
-        <button class="xss-close-btn" onclick="document.getElementById('xssBanner').classList.remove('show')">Got it!</button>
-    </div>
-</div>
 
 <div class="container">
     <h2>👤 User Profile</h2>
@@ -87,7 +27,7 @@
     <form onsubmit="loadProfile(event)">
         <label>Enter Username to View Profile</label>
         <input type="text" id="userInput" placeholder="e.g. john">
-        <p class="hint">💡 Hint: The URL parameter is reflected back — what could you inject?</p>
+        <p class="hint">💡 Hint: Try <code>&lt;img src=x onerror="alert('FLAG{xss_reflected_gotcha}')"&gt;</code></p>
         <button type="submit">View Profile</button>
     </form>
 
@@ -97,15 +37,6 @@
 <footer>SecureShop &copy; 2024 — For educational purposes only</footer>
 
 <script>
-    window.xssSuccess = function() {
-        document.getElementById('xssBanner').classList.add('show');
-    };
-
-    window._origAlert = window.alert;
-    window.alert = function(msg) {
-        document.getElementById('xssBanner').classList.add('show');
-    };
-
     async function loadProfile(e) {
         e.preventDefault();
         const user = document.getElementById('userInput').value;
@@ -117,6 +48,7 @@
             const res = await fetch(`/api/profile?user=${encodeURIComponent(user)}`);
             const data = await res.json();
 
+            // VULNERABLE: data.user is injected raw into innerHTML
             result.innerHTML = `
                 <hr style="margin:25px 0;">
                 <div style="display:flex; align-items:center; gap:20px; margin-bottom:20px;">
@@ -129,7 +61,7 @@
                 <p style="color:#555;">This user hasn't filled out their bio yet.</p>
             `;
 
-            // VULNERABLE: innerHTML renders XSS
+            // VULNERABLE: innerHTML renders XSS payload from URL/input
             document.getElementById('profile-username').innerHTML = data.user;
 
         } catch (err) {
@@ -137,6 +69,7 @@
         }
     }
 
+    // Auto-load if ?user= is in URL
     window.onload = () => {
         const params = new URLSearchParams(window.location.search);
         const user = params.get('user');
@@ -148,14 +81,3 @@
 </script>
 </body>
 </html>
-```
-
----
-
-Now when anyone uses `alert()` or any XSS payload — the flag banner pops up automatically! 🎯
-
-The payloads that will work:
-```
-<script>alert(1)</script>
-<img src=x onerror=alert(1)>
-<svg onload=alert(1)>

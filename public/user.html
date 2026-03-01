@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureShop - Account</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav>
+    <a class="logo" href="index.html">🛒 SecureShop</a>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Search</a></li>
+        <li><a href="comment.html">Community</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="user.html">Account</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="flags.html">🚩 Flags</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2>👤 My Account</h2>
+    <p style="color:#777; margin-bottom:25px;">View your account details and order history.</p>
+
+    <div id="user-info">
+        <p class="loading">Loading your account...</p>
+    </div>
+
+    <hr style="margin:30px 0;">
+    <h3>🔍 Lookup User by ID</h3>
+    <p style="color:#777; font-size:13px; margin-bottom:15px;">Enter a user ID to view their public profile.</p>
+
+    <form onsubmit="lookupUser(event)" style="max-width:300px;">
+        <label>User ID</label>
+        <input type="number" id="userId" placeholder="e.g. 1" min="1" value="1">
+        <button type="submit" style="margin-top:10px;">Lookup</button>
+    </form>
+
+    <div id="lookup-result" style="margin-top:20px;"></div>
+</div>
+
+<footer>SecureShop &copy; 2024 — For educational purposes only</footer>
+
+<script>
+    // Load current user (id=1 hardcoded — simulating logged in session)
+    fetch('/api/user?id=1').then(r => r.json()).then(data => {
+        document.getElementById('user-info').innerHTML = `
+            <div style="background:#f8f9fa; border-radius:8px; padding:20px; max-width:400px;">
+                <p><strong>Username:</strong> ${data.username}</p>
+                <p><strong>Email:</strong> ${data.email}</p>
+                <p><strong>Member since:</strong> ${data.joined}</p>
+                <p><strong>Total orders:</strong> ${data.orders}</p>
+                <p><strong>Notes:</strong> ${data.notes}</p>
+            </div>
+        `;
+    });
+
+    async function lookupUser(e) {
+        e.preventDefault();
+        const id = document.getElementById('userId').value;
+        const result = document.getElementById('lookup-result');
+
+        result.innerHTML = '<p class="loading">Looking up...</p>';
+
+        try {
+            const res = await fetch(`/api/user?id=${id}`);
+            const data = await res.json();
+
+            if (data.error) {
+                result.innerHTML = `<div class="alert alert-danger">❌ ${data.error}</div>`;
+                return;
+            }
+
+            result.innerHTML = `
+                <div style="background:#f8f9fa; border-radius:8px; padding:20px; max-width:400px;">
+                    <h4 style="margin-bottom:15px;">User #${data.id}</h4>
+                    <p><strong>Username:</strong> ${data.username}</p>
+                    <p><strong>Email:</strong> ${data.email}</p>
+                    <p><strong>Member since:</strong> ${data.joined}</p>
+                    <p><strong>Orders:</strong> ${data.orders}</p>
+                    <p><strong>Notes:</strong> <span id="notes-field">${data.notes}</span></p>
+                </div>
+            `;
+
+            // If it's the secret user, show the flag
+            if (data.notes && data.notes.startsWith('FLAG{')) {
+                document.getElementById('notes-field').style.color = '#e74c3c';
+                document.getElementById('notes-field').style.fontWeight = 'bold';
+            }
+        } catch(err) {
+            result.innerHTML = `<div class="alert alert-danger">❌ Request failed.</div>`;
+        }
+    }
+</script>
+</body>
+</html>
