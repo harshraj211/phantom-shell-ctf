@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>SecureShop — Flag Checker</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --green: #00ff88;
@@ -75,48 +74,6 @@
         .flag-status.done { color: var(--green); border-color: var(--green); background: rgba(0,255,136,0.08); }
         .flag-points { font-family: 'Orbitron', sans-serif; font-size: 18px; color: var(--muted); min-width: 60px; text-align: right; }
         .flag-card.captured .flag-points { color: var(--green); }
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-overlay.show { display: flex; }
-        .modal-inner { max-width: 900px; width: 100%; }
-        .modal-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .action-btn { display: flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 3px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; border: none; }
-        .btn-download { background: var(--green); color: #000; }
-        .btn-download:hover { background: #fff; }
-        .btn-linkedin { background: #0077b5; color: #fff; }
-        .btn-linkedin:hover { background: #0099e0; }
-        .btn-close { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-        .btn-close:hover { color: var(--red); border-color: var(--red); }
-        #certificate { background: #faf6ee; width: 100%; aspect-ratio: 1.414 / 1; position: relative; overflow: hidden; font-family: 'Crimson Text', serif; color: #1a1008; border-radius: 4px; }
-        #certificate .cert-outer-border { position: absolute; inset: 12px; border: 2px solid #c9a84c; pointer-events: none; z-index: 2; }
-        #certificate .cert-inner-border { position: absolute; inset: 18px; border: 1px solid rgba(201,168,76,0.4); pointer-events: none; z-index: 2; }
-        #certificate .cert-corner { position: absolute; width: 50px; height: 50px; z-index: 3; }
-        #certificate .cert-corner::before, #certificate .cert-corner::after { content: ''; position: absolute; background: #c9a84c; }
-        #certificate .cert-corner::before { width: 100%; height: 2px; top: 0; }
-        #certificate .cert-corner::after { width: 2px; height: 100%; left: 0; }
-        #certificate .cert-corner.tl { top: 12px; left: 12px; }
-        #certificate .cert-corner.tr { top: 12px; right: 12px; transform: scaleX(-1); }
-        #certificate .cert-corner.bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
-        #certificate .cert-corner.br { bottom: 12px; right: 12px; transform: scale(-1); }
-        #certificate .cert-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 180px; opacity: 0.04; font-family: 'Cinzel', serif; font-weight: 900; color: #c9a84c; white-space: nowrap; pointer-events: none; z-index: 1; }
-        #certificate .cert-body { position: absolute; inset: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 4; padding: 10px 40px; }
-        #certificate .cert-top-emblem { font-size: 36px; margin-bottom: 8px; }
-        #certificate .cert-org { font-family: 'Cinzel', serif; font-size: clamp(9px, 1.5vw, 13px); letter-spacing: 5px; color: #c9a84c; text-transform: uppercase; margin-bottom: 14px; }
-        #certificate .cert-divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); margin: 0 auto 14px; }
-        #certificate .cert-presents { font-size: clamp(10px, 1.4vw, 13px); color: #8a7050; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
-        #certificate .cert-name { font-family: 'Cinzel', serif; font-size: clamp(22px, 4vw, 38px); font-weight: 700; color: #c9a84c; margin-bottom: 6px; }
-        #certificate .cert-line { width: 280px; height: 1px; background: linear-gradient(90deg, transparent, #c9a84c, transparent); margin: 0 auto 16px; }
-        #certificate .cert-title { font-family: 'Cinzel', serif; font-size: clamp(16px, 2.5vw, 22px); font-weight: 900; color: #1a1008; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; }
-        #certificate .cert-subtitle { font-size: clamp(9px, 1.3vw, 12px); color: #8a7050; letter-spacing: 2px; margin-bottom: 20px; }
-        #certificate .cert-body-text { font-size: clamp(9px, 1.3vw, 12px); color: #5a4030; max-width: 480px; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-        #certificate .cert-footer { display: flex; justify-content: space-between; align-items: flex-end; width: 100%; padding: 0 20px; margin-top: auto; }
-        #certificate .cert-sig-block { text-align: center; }
-        #certificate .cert-sig { font-family: 'Cinzel', serif; font-size: clamp(11px, 1.8vw, 16px); font-weight: 700; color: #1a1008; border-bottom: 1px solid #c9a84c; padding-bottom: 4px; margin-bottom: 4px; }
-        #certificate .cert-sig-label { font-size: clamp(7px, 1vw, 10px); letter-spacing: 2px; color: #8a7050; text-transform: uppercase; }
-        #certificate .cert-badge-center { text-align: center; }
-        #certificate .cert-badge-icon { width: clamp(45px, 7vw, 65px); height: clamp(45px, 7vw, 65px); background: radial-gradient(circle at 40% 40%, #f0d070, #c9a84c, #8a6a20); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: clamp(20px, 3vw, 28px); margin: 0 auto 4px; box-shadow: 0 3px 12px rgba(201,168,76,0.4); }
-        #certificate .cert-badge-text { font-size: clamp(6px, 0.9vw, 9px); letter-spacing: 2px; color: #c9a84c; text-transform: uppercase; }
-        #certificate .cert-date-block { font-size: clamp(8px, 1vw, 11px); color: #8a7050; text-align: center; }
-        #certificate .cert-date-label { font-size: clamp(6px, 0.9vw, 9px); letter-spacing: 2px; color: #aaa090; text-transform: uppercase; margin-bottom: 3px; }
         .particle { position: fixed; pointer-events: none; font-size: 16px; animation: particleFly 1s ease-out forwards; z-index: 9999; }
         @keyframes particleFly { 0%{opacity:1;transform:translate(0,0) scale(1)} 100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(0.3)} }
         footer { text-align: center; padding: 40px; color: var(--muted); font-size: 12px; letter-spacing: 2px; border-top: 1px solid var(--border); position: relative; z-index: 1; }
@@ -238,55 +195,6 @@
     </div>
 </div>
 
-<!-- CERTIFICATE MODAL -->
-<div class="modal-overlay" id="certModal">
-    <div class="modal-inner">
-        <div class="modal-actions">
-            <button class="action-btn btn-download" onclick="downloadCert()">⬇ Download Certificate</button>
-            <button class="action-btn btn-linkedin" onclick="shareLinkedIn()">in Share on LinkedIn</button>
-            <button class="action-btn btn-close" onclick="closeModal()">✕ Close</button>
-        </div>
-        <div id="certificate">
-            <div class="cert-outer-border"></div>
-            <div class="cert-inner-border"></div>
-            <div class="cert-corner tl"></div>
-            <div class="cert-corner tr"></div>
-            <div class="cert-corner bl"></div>
-            <div class="cert-corner br"></div>
-            <div class="cert-watermark">CTF</div>
-            <div class="cert-body">
-                <div class="cert-top-emblem">🛡️</div>
-                <div class="cert-org">Phantom Shell CTF · SecureShop Labs</div>
-                <div class="cert-divider"></div>
-                <div class="cert-presents">This Certificate is Proudly Presented To</div>
-                <div class="cert-name" id="cert-player-name">—</div>
-                <div class="cert-line"></div>
-                <div class="cert-title">Certificate of Completion</div>
-                <div class="cert-subtitle">PHANTOM SHELL CTF — WEB SECURITY CHALLENGE</div>
-                <div class="cert-body-text">
-                    For successfully identifying and exploiting all five web vulnerabilities including
-                    SQL Injection, Authentication Bypass, UNION-based Data Extraction,
-                    Stored XSS, and Reflected XSS — demonstrating exceptional skill
-                    in web application security and ethical hacking.
-                </div>
-                <div class="cert-footer">
-                    <div class="cert-sig-block">
-                        <div class="cert-sig">ınfinity &amp; Harsh Raj</div>
-                        <div class="cert-sig-label">In Collaboration</div>
-                    </div>
-                    <div class="cert-badge-center">
-                        <div class="cert-badge-icon">🏆</div>
-                        <div class="cert-badge-text">All Flags<br>Captured</div>
-                    </div>
-                    <div class="cert-date-block">
-                        <div class="cert-date-label">Date Issued</div>
-                        <div id="cert-date">—</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <footer>PHANTOM SHELL CTF &nbsp;·&nbsp; BY HARSH RAJ &nbsp;·&nbsp; FOR EDUCATIONAL PURPOSES</footer>
 
@@ -300,10 +208,6 @@
     if (!localStorage.getItem('ctf_player_name')) window.location.href = 'welcome.html';
 
     document.getElementById('player-display').textContent = playerName;
-    document.getElementById('cert-player-name').textContent = playerName;
-    document.getElementById('cert-date').textContent = new Date().toLocaleDateString('en-IN', {
-        day: 'numeric', month: 'long', year: 'numeric'
-    });
 
     function save() { localStorage.setItem('ctf_flags', JSON.stringify(captured)); }
 
@@ -322,7 +226,6 @@
                 pts.textContent = item.points + ' pts';
             }
         });
-        if (count === 7) setTimeout(() => showCertificate(), 800);
     }
 
     async function submitFlag() {
@@ -385,7 +288,7 @@
 
             feedback.className = 'feedback success';
             feedback.textContent = captured.length === 7
-                ? `> 🏆 FINAL FLAG! All challenges complete! Generating certificate...`
+                ? `> 🏆 FINAL FLAG! All challenges complete!`
                 : `> FLAG CAPTURED! +${data.points} pts`;
 
             input.value = '';
@@ -399,35 +302,6 @@
         btn.disabled = false;
     }
 
-    function showCertificate() { document.getElementById('certModal').classList.add('show'); }
-    function closeModal() { document.getElementById('certModal').classList.remove('show'); }
-
-    document.getElementById('certModal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
-
-    function downloadCert() {
-        html2canvas(document.getElementById('certificate'), {
-            scale: 3, useCORS: true, backgroundColor: '#faf6ee', logging: false
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `PhantomShell_CTF_${playerName.replace(/\s+/g,'_')}.png`;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-        });
-    }
-
-    function shareLinkedIn() {
-        const text = encodeURIComponent(
-            `🏆 I just completed the Phantom Shell CTF by Harsh Raj!\n\n` +
-            `Successfully exploited all 7 web vulnerabilities:\n` +
-            `✅ Broken Auth (JS Source)\n✅ SQL Injection\n` +
-            `✅ UNION SQLi\n✅ Stored XSS\n✅ Reflected XSS\n` +
-            `✅ IDOR\n✅ Path Traversal\n\n` +
-            `Total Score: 2100 pts 🔐\n\n#CTF #WebSecurity #EthicalHacking #CyberSecurity`
-        );
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://linkedin.com&summary=${text}`, '_blank', 'width=600,height=600');
-    }
 
     function spawnParticles(x, y) {
         const emojis = ['✨','⚡','🚩','💚','🟢','⭐'];
