@@ -29,7 +29,7 @@
     <form onsubmit="doLogin(event)">
         <label>Username</label>
         <input type="text" id="username" placeholder="Enter username" autocomplete="off">
-        <p class="hint">💡 Try: <code>' OR '1'='1' --</code> as username</p>
+        <p class="hint">💡 Hint: look for SQL comment-style bypass behavior in username handling</p>
 
         <label>Password</label>
         <input type="password" id="password" placeholder="Enter password">
@@ -60,7 +60,7 @@
             if (data.success) {
                 result.innerHTML = `
                     <div class="alert alert-success">✅ Welcome back, <strong>${data.username}</strong>!</div>
-                    <div class="flag-box">🚩 ${data.flag}</div>
+                    ${data.flagToken ? `<div class="flag-box">🚩 ${data.flagToken}</div>` : ''}
                 `;
             } else {
                 result.innerHTML = `<div class="alert alert-danger">❌ ${data.error}</div>`;

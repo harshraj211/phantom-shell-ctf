@@ -27,7 +27,7 @@
     <form onsubmit="loadProfile(event)">
         <label>Enter Username to View Profile</label>
         <input type="text" id="userInput" placeholder="e.g. john">
-        <p class="hint">💡 Hint: Try <code>&lt;img src=x onerror="alert('FLAG{xss_reflected_gotcha}')"&gt;</code></p>
+        <p class="hint">💡 Hint: script tags are filtered, but event handler vectors may still execute</p>
         <button type="submit">View Profile</button>
     </form>
 

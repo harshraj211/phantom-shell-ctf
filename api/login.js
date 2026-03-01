@@ -1,5 +1,7 @@
 // api/login.js - Intentionally vulnerable to SQL Injection (harder version)
 
+import { encryptFlagFromKey } from './_flagSecurity.js';
+
 const DB = {
   users: [
     { id: 1, username: 'admin',   password: 'Adm!nS3cur3#2024', role: 'admin' },
@@ -51,7 +53,7 @@ export default function handler(req, res) {
     success: true,
     username: user.username,
     role: user.role,
-    flag: user.role === 'admin' ? 'FLAG{sql_bypass_master}' : null,
+    flagToken: user.role === 'admin' ? encryptFlagFromKey('sql_bypass_master') : null,
     message: user.role === 'admin' ? 'Welcome back, Admin.' : `Welcome, ${user.username}.`
   });
 }

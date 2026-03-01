@@ -68,7 +68,7 @@
                 return;
             }
 
-            const isFlag = data.content && data.content.startsWith('FLAG{');
+            const isFlag = data.content && data.content.startsWith('ENC$');
             result.innerHTML = `
                 <p style="color:#777; font-size:13px; margin-bottom:8px;">📄 ${data.filename}</p>
                 <div class="file-viewer" style="${isFlag ? 'color:#e74c3c; font-size:18px; font-weight:bold;' : ''}">${data.content}</div>

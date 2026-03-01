@@ -2,12 +2,14 @@
 // IDOR: users can access any user's private data by changing the id parameter
 // Flag is hidden in user id=5 private notes — not obvious at all
 
+import { encryptFlagFromKey } from './_flagSecurity.js';
+
 const USERS = [
   { id: 1, username: 'john',       email: 'john@example.com',    joined: '2023-01-10', orders: 12, notes: 'Nothing here.' },
   { id: 2, username: 'alice',      email: 'alice@example.com',   joined: '2023-03-22', orders: 5,  notes: 'Nothing here.' },
   { id: 3, username: 'bob',        email: 'bob@example.com',     joined: '2023-06-05', orders: 8,  notes: 'Nothing here.' },
   { id: 4, username: 'charlie',    email: 'charlie@example.com', joined: '2023-09-14', orders: 2,  notes: 'Nothing here.' },
-  { id: 5, username: 'sysbackup',  email: 'backup@internal',     joined: '2022-01-01', orders: 0,  notes: 'FLAG{idor_peeking_at_private_data}' },
+  { id: 5, username: 'sysbackup',  email: 'backup@internal',     joined: '2022-01-01', orders: 0,  notes: encryptFlagFromKey('idor_peeking_at_private_data') },
 ];
 
 export default function handler(req, res) {

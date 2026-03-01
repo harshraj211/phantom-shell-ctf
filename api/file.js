@@ -1,6 +1,7 @@
 // api/file.js - Path Traversal vulnerability
 // Serves "static docs" but is vulnerable to directory traversal
-// Flag is at: ../../../../secret/flag (must traverse out of docs folder)
+
+import { encryptFlagFromKey } from './_flagSecurity.js';
 
 const SAFE_FILES = {
   'readme.txt':   'Welcome to SecureShop documentation.',
@@ -11,11 +12,11 @@ const SAFE_FILES = {
 
 // Simulated file system — traversal leads to secret directory
 const SECRET_FILES = {
-  'secret/flag':         'FLAG{path_traversal_master}',
-  'secret/flag.txt':     'FLAG{path_traversal_master}',
+  'vault/cache.bin':     encryptFlagFromKey('path_traversal_master'),
+  'vault/archive.dat':   encryptFlagFromKey('path_traversal_master'),
   'etc/passwd':          'root:x:0:0:root:/root:/bin/bash\njohn:x:1001:1001::/home/john:/bin/sh',
   'etc/shadow':          'Access denied.',
-  'app/config.env':      'DB_HOST=localhost\nDB_PASS=hunter2\n# flag is in /secret/flag',
+  'app/config.env':      'DB_HOST=localhost\nDB_PASS=hunter2\n# audit artifact stored in /vault/archive.dat',
 };
 
 export default function handler(req, res) {
@@ -48,7 +49,7 @@ export default function handler(req, res) {
   }
 
   // VULNERABLE: traversal via ....// pattern bypasses the check above
-  // e.g. ....//....//secret/flag  →  after replace becomes  ../../secret/flag
+  // e.g. ....//....//vault/archive.dat  →  after replace becomes  ../../vault/archive.dat
   // Simulate what the traversal resolves to
   const resolved = name
     .replace(/\.\.\.\.\//g, '../')    // ..../ → ../

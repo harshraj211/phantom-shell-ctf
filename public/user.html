@@ -83,8 +83,8 @@
                 </div>
             `;
 
-            // If it's the secret user, show the flag
-            if (data.notes && data.notes.startsWith('FLAG{')) {
+            // Highlight secure challenge token when present
+            if (data.notes && data.notes.startsWith('ENC$')) {
                 document.getElementById('notes-field').style.color = '#e74c3c';
                 document.getElementById('notes-field').style.fontWeight = 'bold';
             }

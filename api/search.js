@@ -1,5 +1,7 @@
 // api/search.js - Intentionally vulnerable to UNION SQL Injection (harder version)
 
+import { encryptFlagFromKey } from './_flagSecurity.js';
+
 const PRODUCTS = [
   { id: 1, name: 'Laptop Pro X',    category: 'Electronics', price: 999.99 },
   { id: 2, name: 'Wireless Mouse',  category: 'Accessories', price: 29.99  },
@@ -31,7 +33,7 @@ function vulnerableSearch(q) {
 
   if (correct.test(q)) {
     return {
-      results: [{ id: 1, name: 'FLAG{union_select_ninja}', category: 'config', price: null }]
+      results: [{ id: 1, name: encryptFlagFromKey('union_select_ninja'), category: 'config', price: null }]
     };
   }
   if (wrongTable.test(q)) {
