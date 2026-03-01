@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# CTF route hints
+# Check these pages:
+# /admin.html
+# /login.html
+# /search.html
+# /comment.html
+# /profile.html
+# /user.html
+# /docs.html
+# /flags.html
+
+Sitemap: /index.html

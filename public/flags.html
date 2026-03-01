@@ -310,7 +310,7 @@
     function updateUI() {
         const count = captured.length;
         document.getElementById('captured-count').textContent = count;
-        document.getElementById('progress-fill').style.width = (count / 5 * 100) + '%';
+        document.getElementById('progress-fill').style.width = (count / 7 * 100) + '%';
         captured.forEach(item => {
             const card = document.getElementById('card-' + item.key);
             const status = document.getElementById('status-' + item.key);
