@@ -89,6 +89,8 @@
         <li><a href="search.html">Search</a></li>
         <li><a href="comment.html">Community</a></li>
         <li><a href="profile.html">Profile</a></li>
+        <li><a href="user.html">Account</a></li>
+        <li><a href="docs.html">Docs</a></li>
         <li><a href="login.html">Login</a></li>
         <li><a href="flags.html" style="color:var(--green);">🚩 Flags</a></li>
     </ul>
@@ -127,70 +129,70 @@
             <div class="flag-icon">⚙️</div>
             <div class="flag-info">
                 <div class="flag-name">Admin Panel — Broken Authentication</div>
-                <div class="flag-meta">Vulnerability: Sensitive data exposure in client-side code</div>
+                <div class="flag-meta">Find hardcoded credentials in the JavaScript source code</div>
             </div>
             <span class="flag-status pending" id="status-js_source_hunter">PENDING</span>
-            <div class="flag-points" id="pts-js_source_hunter">100 pts</div>
+            <div class="flag-points" id="pts-js_source_hunter">50 pts</div>
         </div>
 
         <div class="flag-card" id="card-sql_bypass_master">
             <div class="flag-icon">🔐</div>
             <div class="flag-info">
                 <div class="flag-name">Login Page — SQL Injection</div>
-                <div class="flag-meta">Vulnerability: Authentication bypass via comment-based SQLi</div>
+                <div class="flag-meta">Bypass login using SQL injection (try admin'-- or ' OR '1'='1'--)</div>
             </div>
             <span class="flag-status pending" id="status-sql_bypass_master">PENDING</span>
-            <div class="flag-points" id="pts-sql_bypass_master">300 pts</div>
+            <div class="flag-points" id="pts-sql_bypass_master">100 pts</div>
         </div>
 
         <div class="flag-card" id="card-union_select_ninja">
             <div class="flag-icon">🔍</div>
             <div class="flag-info">
                 <div class="flag-name">Product Search — UNION SQLi</div>
-                <div class="flag-meta">Vulnerability: Data extraction via UNION-based injection</div>
+                <div class="flag-meta">Extract hidden data using UNION SELECT from the 'secrets' table</div>
             </div>
             <span class="flag-status pending" id="status-union_select_ninja">PENDING</span>
-            <div class="flag-points" id="pts-union_select_ninja">400 pts</div>
+            <div class="flag-points" id="pts-union_select_ninja">100 pts</div>
         </div>
 
         <div class="flag-card" id="card-xss_stored_pwned">
             <div class="flag-icon">💬</div>
             <div class="flag-info">
                 <div class="flag-name">Community Board — Stored XSS</div>
-                <div class="flag-meta">Vulnerability: Persistent cross-site scripting via HTML injection</div>
+                <div class="flag-meta">Inject HTML to steal the admin's session cookie via XSS</div>
             </div>
             <span class="flag-status pending" id="status-xss_stored_pwned">PENDING</span>
-            <div class="flag-points" id="pts-xss_stored_pwned">300 pts</div>
+            <div class="flag-points" id="pts-xss_stored_pwned">100 pts</div>
         </div>
 
         <div class="flag-card" id="card-xss_reflected_gotcha">
             <div class="flag-icon">👤</div>
             <div class="flag-info">
                 <div class="flag-name">Profile Page — Reflected XSS</div>
-                <div class="flag-meta">Vulnerability: Reflected cross-site scripting via URL parameter</div>
+                <div class="flag-meta">Inject HTML in the username field to steal session cookies</div>
             </div>
             <span class="flag-status pending" id="status-xss_reflected_gotcha">PENDING</span>
-            <div class="flag-points" id="pts-xss_reflected_gotcha">250 pts</div>
+            <div class="flag-points" id="pts-xss_reflected_gotcha">75 pts</div>
         </div>
 
         <div class="flag-card" id="card-idor_peeking_at_private_data">
             <div class="flag-icon">🔑</div>
             <div class="flag-info">
                 <div class="flag-name">Account Page — IDOR</div>
-                <div class="flag-meta">Vulnerability: Insecure Direct Object Reference on user endpoint</div>
+                <div class="flag-meta">Access other users' private data by changing the user ID (try 1–5)</div>
             </div>
             <span class="flag-status pending" id="status-idor_peeking_at_private_data">PENDING</span>
-            <div class="flag-points" id="pts-idor_peeking_at_private_data">350 pts</div>
+            <div class="flag-points" id="pts-idor_peeking_at_private_data">75 pts</div>
         </div>
 
         <div class="flag-card" id="card-path_traversal_master">
             <div class="flag-icon">📁</div>
             <div class="flag-info">
                 <div class="flag-name">Docs Viewer — Path Traversal</div>
-                <div class="flag-meta">Vulnerability: Directory traversal via filename parameter</div>
+                <div class="flag-meta">Use ../ in the filename to read files outside the docs directory</div>
             </div>
             <span class="flag-status pending" id="status-path_traversal_master">PENDING</span>
-            <div class="flag-points" id="pts-path_traversal_master">400 pts</div>
+            <div class="flag-points" id="pts-path_traversal_master">100 pts</div>
         </div>
     </div>
 </div>

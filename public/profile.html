@@ -27,7 +27,7 @@
     <form onsubmit="loadProfile(event)">
         <label>Enter Username to View Profile</label>
         <input type="text" id="userInput" placeholder="e.g. john">
-        <p class="hint">💡 Hint: script tags are filtered, but event handler vectors may still execute</p>
+        <p class="hint">💡 Hint: Try <code>&lt;img src=x onerror=alert(document.cookie)&gt;</code> as the username to steal session cookies</p>
         <button type="submit">View Profile</button>
     </form>
 
@@ -37,6 +37,15 @@
 <footer>SecureShop &copy; 2024 — For educational purposes only</footer>
 
 <script>
+    // Simulate admin session — page has a session cookie that XSS can steal
+    (async function() {
+        try {
+            const r = await fetch('/api/flag?key=xss_reflected_gotcha');
+            const d = await r.json();
+            if (d.token) document.cookie = "session_token=" + d.token + "; path=/";
+        } catch(e) {}
+    })();
+
     async function loadProfile(e) {
         e.preventDefault();
         const user = document.getElementById('userInput').value;

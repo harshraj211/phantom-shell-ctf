@@ -7,13 +7,13 @@ const SECRET = process.env.CTF_FLAG_SECRET || 'ctf-local-dev-secret-change-this'
 const KEY = crypto.createHash('sha256').update(`${SECRET}|aes-key`).digest();
 
 export const FLAG_META = Object.freeze({
-  js_source_hunter: { points: 100 },
-  sql_bypass_master: { points: 300 },
-  union_select_ninja: { points: 400 },
-  xss_stored_pwned: { points: 300 },
-  xss_reflected_gotcha: { points: 250 },
-  idor_peeking_at_private_data: { points: 350 },
-  path_traversal_master: { points: 400 },
+  js_source_hunter: { points: 50 },
+  sql_bypass_master: { points: 100 },
+  union_select_ninja: { points: 100 },
+  xss_stored_pwned: { points: 100 },
+  xss_reflected_gotcha: { points: 75 },
+  idor_peeking_at_private_data: { points: 75 },
+  path_traversal_master: { points: 100 },
 });
 
 function toBase64Url(buffer) {

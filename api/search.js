@@ -1,4 +1,4 @@
-// api/search.js - Intentionally vulnerable to UNION SQL Injection (harder version)
+// api/search.js - Intentionally vulnerable to UNION SQL Injection (easy version)
 
 import { encryptFlagFromKey } from './_flagSecurity.js';
 
@@ -12,9 +12,8 @@ const PRODUCTS = [
   { id: 7, name: 'Desk Lamp',       category: 'Furniture',   price: 34.99  },
 ];
 
-// HARDER: column count is 4, but user must figure that out
-// Table name is 'config' not 'secrets', column is 'value' not 'flag'
-// Must also include WHERE key='flag' condition
+// EASY: column count is 4, table name is 'secrets'
+// Payload: ' UNION SELECT 1,2,3,4 FROM secrets--
 
 function vulnerableSearch(q) {
   const union = /union\s+select/i;
@@ -26,30 +25,23 @@ function vulnerableSearch(q) {
     return { results };
   }
 
-  // They found UNION — now check if they got the right table/column
-  const correct = /union\s+select\s+.+from\s+config.+where\s+key\s*=\s*'flag'/i;
-  const almostRight = /union\s+select\s+.+from\s+config/i;
-  const wrongTable = /union\s+select\s+.+from\s+secrets/i;
-
-  if (correct.test(q)) {
+  // Check if they used the correct table name
+  if (/union\s+select\s+.+from\s+secrets/i.test(q)) {
     return {
-      results: [{ id: 1, name: encryptFlagFromKey('union_select_ninja'), category: 'config', price: null }]
-    };
-  }
-  if (wrongTable.test(q)) {
-    return {
-      results: [{ id: '?', name: "Table 'secrets' doesn't exist.", category: '', price: null }]
-    };
-  }
-  if (almostRight.test(q)) {
-    return {
-      results: [{ id: '?', name: 'Almost... check the WHERE clause.', category: 'config', price: null }]
+      results: [{ id: '!', name: encryptFlagFromKey('union_select_ninja'), category: 'SECRET', price: 0 }]
     };
   }
 
-  // Wrong column count or wrong syntax
+  // Used UNION SELECT with a wrong table name
+  if (/union\s+select\s+.+from\s+\w+/i.test(q)) {
+    return {
+      results: [{ id: '?', name: "Table not found. Hint: try 'secrets'.", category: '', price: null }]
+    };
+  }
+
+  // UNION SELECT without FROM
   return {
-    results: [{ id: '?', name: 'Column count mismatch. Try ORDER BY to find column count.', category: '', price: null }]
+    results: [{ id: '?', name: 'UNION detected! Add FROM <table_name> to extract data.', category: '', price: null }]
   };
 }
 

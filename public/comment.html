@@ -30,7 +30,7 @@
 
         <label>Comment</label>
         <textarea id="comment" rows="4" placeholder="Write something..."></textarea>
-        <p class="hint">💡 Hint: Try <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> in the comment field</p>
+        <p class="hint">💡 Hint: Try <code>&lt;img src=x onerror=alert(document.cookie)&gt;</code> in the comment field to steal the admin's session cookie</p>
 
         <button type="submit">Post Comment</button>
     </form>
@@ -45,6 +45,15 @@
 <footer>SecureShop &copy; 2024 — For educational purposes only</footer>
 
 <script>
+    // Simulate admin session — admin visits this page with their session cookie
+    (async function() {
+        try {
+            const r = await fetch('/api/flag?key=xss_stored_pwned');
+            const d = await r.json();
+            if (d.token) document.cookie = "admin_session=" + d.token + "; path=/";
+        } catch(e) {}
+    })();
+
     async function loadComments() {
         const list = document.getElementById('comments-list');
         try {

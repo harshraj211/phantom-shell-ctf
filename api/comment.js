@@ -1,4 +1,4 @@
-// api/comment.js - Stored XSS (harder: must use non-obvious payload)
+// api/comment.js - Stored XSS (easy: script tags stripped, but event handlers like <img onerror=...> work)
 
 const comments = [
   { id: 1, name: 'Alice', comment: 'Great platform! Love the products here.', created_at: '2024-01-15 10:30:00' },
@@ -20,7 +20,8 @@ export default function handler(req, res) {
     const { name = 'Anonymous', comment = '' } = req.body || {};
     if (!comment.trim()) return res.status(400).json({ error: 'Comment cannot be empty.' });
 
-    // HARDER: strips <script> and javascript: but NOT svg/img event handlers
+    // EASY: strips <script> and javascript: but NOT event handlers like img/svg/details
+    // Payloads that work: <img src=x onerror=alert(1)>, <svg onload=alert(1)>
     let sanitized = comment
       .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '')
       .replace(/javascript:/gi, '')

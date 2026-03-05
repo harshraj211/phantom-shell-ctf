@@ -1,4 +1,4 @@
-// api/profile.js - Reflected XSS (harder: script tags stripped, must use event handlers)
+// api/profile.js - Reflected XSS (easy: script tags stripped, event handlers work)
 
 export default function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,8 +9,8 @@ export default function handler(req, res) {
 
   let user = req.query.user || '';
 
-  // HARDER: strips <script> tags but NOT event handlers
-  // onerror=, onload=, onfocus= etc still work
+  // EASY: strips <script> tags but NOT event handlers
+  // Payloads that work: <img src=x onerror=alert(1)>
   user = user.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
   user = user.replace(/<script/gi, '');
 

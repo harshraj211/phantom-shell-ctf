@@ -29,7 +29,7 @@
     <form onsubmit="doLogin(event)">
         <label>Username</label>
         <input type="text" id="username" placeholder="Enter username" autocomplete="off">
-        <p class="hint">💡 Hint: look for SQL comment-style bypass behavior in username handling</p>
+        <p class="hint">💡 Hint: Try <code>admin'--</code> as the username to bypass authentication (SQL comment injection)</p>
 
         <label>Password</label>
         <input type="password" id="password" placeholder="Enter password">

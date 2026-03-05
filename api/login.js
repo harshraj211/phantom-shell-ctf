@@ -1,4 +1,4 @@
-// api/login.js - Intentionally vulnerable to SQL Injection (harder version)
+// api/login.js - Intentionally vulnerable to SQL Injection (easy version - both OR and comment bypass work)
 
 import { encryptFlagFromKey } from './_flagSecurity.js';
 
@@ -14,20 +14,21 @@ const DB = {
 // Simulates: SELECT * FROM users WHERE username='$input' AND password='$input'
 // HARDER: only comment-based bypass works now, OR '1'='1 style is filtered
 function vulnerableQuery(username, password) {
-  // Block naive OR bypass attempts
-  const blocked = [/'.*or.*'1'.*=.*'1/i, /'\s*or\s*'\w+'\s*=\s*'\w+/i];
-  if (blocked.some(p => p.test(username))) {
-    return { error: 'Suspicious input detected.' };
-  }
+  // VULNERABLE: Both comment-based and OR-based bypass work
+  // Payloads: admin'-- | admin'# | ' OR '1'='1'-- | ' OR 1=1--
 
-  // VULNERABLE: comment-based bypass still works
-  // Payload: admin'-- or admin'#
+  // Comment bypass: admin'-- or admin'#
   const commentBypass = /'\s*(--|#|\/\*)/;
   if (commentBypass.test(username)) {
     const uname = username.split("'")[0].trim();
     const user = DB.users.find(u => u.username === uname);
     if (user) return { user };
-    // If username before ' doesn't match, still bypass as admin
+    return { user: DB.users[0] };
+  }
+
+  // OR bypass: ' OR '1'='1 or ' OR 1=1
+  const orBypass = /'\s*or\s+/i;
+  if (orBypass.test(username)) {
     return { user: DB.users[0] };
   }
 
